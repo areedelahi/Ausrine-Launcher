@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import '../domain/user_account.dart';
 
 /// Official Minecraft Launcher Client ID (v1.0 MSA)
@@ -192,7 +193,11 @@ class MsAuthService {
     final completer = Completer<String>();
 
     final dir = await getApplicationSupportDirectory();
-    final webviewPath = '${dir.path}/webview_cache';
+    final webviewDir = Directory(p.join(dir.path, 'webview_cache'));
+    if (!await webviewDir.exists()) {
+      await webviewDir.create(recursive: true);
+    }
+    final webviewPath = webviewDir.path;
 
     // Clear cached session so the user can pick a different account each time.
     await WebviewWindow.clearAll(userDataFolderWindows: webviewPath);
