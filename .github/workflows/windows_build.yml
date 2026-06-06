@@ -23,10 +23,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust
+          shared-key: "windows-v2"
           cache-directories: |
             .dart_tool
-            build/windows/x64/cargokit
-            build/windows/cargokit
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
