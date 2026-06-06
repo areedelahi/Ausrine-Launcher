@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:desktop_webview_window/desktop_webview_window.dart';
+import 'package:path_provider/path_provider.dart';
 import '../domain/user_account.dart';
 
 /// Official Minecraft Launcher Client ID (v1.0 MSA)
@@ -190,15 +191,19 @@ class MsAuthService {
   Future<String> _getCodeFromWebView(String url) async {
     final completer = Completer<String>();
 
+    final dir = await getApplicationSupportDirectory();
+    final webviewPath = '${dir.path}/webview_cache';
+
     // Clear cached session so the user can pick a different account each time.
-    await WebviewWindow.clearAll(userDataFolderWindows: '');
+    await WebviewWindow.clearAll(userDataFolderWindows: webviewPath);
 
     final webview = await WebviewWindow.create(
-      configuration: const CreateConfiguration(
+      configuration: CreateConfiguration(
         windowHeight: 700,
         windowWidth: 500,
         title: 'Sign in to Microsoft',
         titleBarTopPadding: 0,
+        userDataFolderWindows: webviewPath,
       ),
     );
 
