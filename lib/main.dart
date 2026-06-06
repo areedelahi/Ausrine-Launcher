@@ -8,55 +8,97 @@ import 'shell/app_router.dart';
 import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'src/rust/frb_generated.dart';
 
+import 'dart:async';
+import 'dart:ui';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+
+File? _globalLogFile;
+
+void _logError(String message, [Object? error, StackTrace? stack]) {
+  final now = DateTime.now().toIso8601String();
+  final logMsg = '[$now] ERROR: $message\n${error ?? ''}\n${stack ?? ''}\n';
+  print(logMsg);
+  try {
+    _globalLogFile?.writeAsStringSync(logMsg, mode: FileMode.append);
+  } catch (_) {}
+}
+
 Future<void> main(List<String> args) async {
   if (runWebViewTitleBarWidget(args)) {
     return;
   }
-  WidgetsFlutterBinding.ensureInitialized();
   
-  await RustLib.init();
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Initialize logger file
+    try {
+      final dir = await getApplicationSupportDirectory();
+      final logDir = Directory(p.join(dir.path, 'logs'));
+      if (!await logDir.exists()) await logDir.create(recursive: true);
+      _globalLogFile = File(p.join(logDir.path, 'latest.log'));
+      
+      // Wipe old log on fresh startup
+      if (await _globalLogFile!.exists()) {
+        await _globalLogFile!.delete();
+      }
+      _globalLogFile!.writeAsStringSync('[${DateTime.now().toIso8601String()}] Meridix Launcher Started\n');
+    } catch (_) {}
 
-  // ── Window setup ────────────────────────────────────────────────────────
-  await Window.initialize();
-  await windowManager.ensureInitialized();
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      _logError('Flutter framework error', details.exception, details.stack);
+    };
 
-  final options = WindowOptions(
-    size: const Size(1280, 800),
-    minimumSize: const Size(960, 640),
-    center: true,
-    backgroundColor: const Color(0xFF0C0E13),
-    skipTaskbar: false,
-    // macOS: hidden lets traffic lights float over app content so the
-    // background colour is seamless. Windows/Linux: keep native chrome.
-    titleBarStyle: Platform.isMacOS ? TitleBarStyle.hidden : TitleBarStyle.normal,
-    title: 'Meridix Launcher',
-  );
+    PlatformDispatcher.instance.onError = (error, stack) {
+      _logError('Platform dispatcher error', error, stack);
+      return true;
+    };
 
-  // Apply platform-appropriate background effect
-  if (Platform.isWindows) {
-    await Window.setEffect(
-      effect: WindowEffect.acrylic,
-      color: const Color(0xCC0C0E13),
+    await RustLib.init();
+
+    // ── Window setup ────────────────────────────────────────────────────────
+    await Window.initialize();
+    await windowManager.ensureInitialized();
+
+    final options = WindowOptions(
+      size: const Size(1280, 800),
+      minimumSize: const Size(960, 640),
+      center: true,
+      backgroundColor: const Color(0xFF0C0E13),
+      skipTaskbar: false,
+      titleBarStyle: Platform.isMacOS ? TitleBarStyle.hidden : TitleBarStyle.normal,
+      title: 'Meridix Launcher',
     );
-  } else if (Platform.isMacOS) {
-    await Window.setEffect(
-      effect: WindowEffect.hudWindow,
-      color: const Color(0xFF0C0E13),
-    );
-  } else {
-    await Window.setEffect(
-      effect: WindowEffect.transparent,
-      color: const Color(0xFF0C0E13),
-    );
-  }
 
-  await windowManager.waitUntilReadyToShow(options, () async {
-    await windowManager.setBackgroundColor(const Color(0xFF0C0E13));
-    await windowManager.show();
-    await windowManager.focus();
+    if (Platform.isWindows) {
+      await Window.setEffect(
+        effect: WindowEffect.acrylic,
+        color: const Color(0xCC0C0E13),
+      );
+    } else if (Platform.isMacOS) {
+      await Window.setEffect(
+        effect: WindowEffect.hudWindow,
+        color: const Color(0xFF0C0E13),
+      );
+    } else {
+      await Window.setEffect(
+        effect: WindowEffect.transparent,
+        color: const Color(0xFF0C0E13),
+      );
+    }
+
+    await windowManager.waitUntilReadyToShow(options, () async {
+      await windowManager.setBackgroundColor(const Color(0xFF0C0E13));
+      await windowManager.show();
+      await windowManager.focus();
+    });
+
+    runApp(const ProviderScope(child: MeridixLauncherApp()));
+  }, (error, stack) {
+    _logError('Uncaught asynchronous error', error, stack);
   });
-
-  runApp(const ProviderScope(child: MeridixLauncherApp()));
 }
 
 class MeridixLauncherApp extends StatelessWidget {
