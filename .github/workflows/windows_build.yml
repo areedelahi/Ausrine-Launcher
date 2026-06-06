@@ -23,6 +23,10 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: rust
+          cache-directories: |
+            .dart_tool
+            build/windows/x64/cargokit
+            build/windows/cargokit
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
