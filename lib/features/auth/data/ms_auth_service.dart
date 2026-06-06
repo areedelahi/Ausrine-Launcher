@@ -194,12 +194,20 @@ class MsAuthService {
 
     final dir = await getApplicationSupportDirectory();
     final webviewDir = Directory(p.join(dir.path, 'webview_cache'));
+    
+    // Safely wipe the cookies via Dart to prevent the C++ plugin race condition
+    try {
+      if (await webviewDir.exists()) {
+        await webviewDir.delete(recursive: true);
+      }
+    } catch (_) {
+      // Ignore if a background WebView2 process is lingering and holding a file lock
+    }
+    
     if (!await webviewDir.exists()) {
       await webviewDir.create(recursive: true);
     }
     final webviewPath = webviewDir.path;
-
-    // Do NOT call clearAll here, it locks the directory on Windows and causes a grey screen race condition!
     
     final webview = await WebviewWindow.create(
       configuration: CreateConfiguration(
