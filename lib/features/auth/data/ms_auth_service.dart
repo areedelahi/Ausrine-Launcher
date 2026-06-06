@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:desktop_webview_window/desktop_webview_window.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import '../domain/user_account.dart';
@@ -33,6 +35,7 @@ class MsAuthService {
 
   /// Full login flow. Opens a WebView popup, waits for code, exchanges tokens,
   /// authenticates with Xbox + Minecraft, and returns a [UserAccount].
+  /// Start the MSA v1.0 OAuth flow and return a fully resolved Microsoft token.
   Future<UserAccount> loginWithBrowser() async {
     // Build authorization URL (MSA v1.0)
     final authUrl = Uri.https(
@@ -41,13 +44,13 @@ class MsAuthService {
       {
         'client_id': _clientId,
         'response_type': 'code',
-        'redirect_uri': _redirectUri,
+        'redirect_uri': _redirectUri, // This MUST be the official desktop.srf endpoint
         'scope': _scopes,
       },
     );
 
-    // Get auth code via WebView
-    final code = await _getCodeFromWebView(authUrl.toString());
+    // Use our local HTML fallback server to handle the copy-paste
+    final code = await _getCodeFromBrowser(authUrl.toString());
 
     // Exchange code for MS tokens (MSA v1.0)
     final msTokens = await _exchangeCodeForMsToken(
@@ -187,61 +190,100 @@ class MsAuthService {
     return _extractSkinUrl(profile);
   }
 
-  // ── WebView popup ─────────────────────────────────────────────────────────
+  // ── Browser Popup Fallback ────────────────────────────────────────────────
 
-  Future<String> _getCodeFromWebView(String url) async {
+  Future<String> _getCodeFromBrowser(String authUrl) async {
     final completer = Completer<String>();
-
-    final dir = await getApplicationSupportDirectory();
-    final webviewDir = Directory(p.join(dir.path, 'webview_cache'));
     
-    // Safely wipe the cookies via Dart to prevent the C++ plugin race condition
-    try {
-      if (await webviewDir.exists()) {
-        await webviewDir.delete(recursive: true);
-      }
-    } catch (_) {
-      // Ignore if a background WebView2 process is lingering and holding a file lock
+    // Spin up a tiny local HTTP server on a random port
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    final localPort = server.port;
+    
+    // Launch our local server in the system browser
+    if (!await launchUrl(Uri.parse('http://localhost:$localPort'))) {
+      server.close(force: true);
+      throw Exception('Could not open the system browser for authentication.');
     }
-    
-    if (!await webviewDir.exists()) {
-      await webviewDir.create(recursive: true);
-    }
-    final webviewPath = webviewDir.path;
-    
-    final webview = await WebviewWindow.create(
-      configuration: CreateConfiguration(
-        windowHeight: 700,
-        windowWidth: 500,
-        title: 'Sign in to Microsoft',
-        userDataFolderWindows: webviewPath,
-      ),
-    );
 
-    webview.setOnUrlRequestCallback((urlStr) {
-      if (urlStr.startsWith(_redirectUri)) {
-        final uri = Uri.parse(urlStr);
-        final code = uri.queryParameters['code'];
-        final error = uri.queryParameters['error'];
+    server.listen((HttpRequest request) async {
+      if (request.method == 'POST') {
+        // The user submitted the pasted URL
+        final content = await utf8.decoder.bind(request).join();
+        final params = Uri.splitQueryString(content);
+        final pastedUrlStr = params['pasted_url'] ?? '';
+        
+        try {
+          final pastedUri = Uri.parse(pastedUrlStr.trim());
+          final code = pastedUri.queryParameters['code'];
+          final error = pastedUri.queryParameters['error'];
 
-        if (code != null) {
-          if (!completer.isCompleted) completer.complete(code);
-          webview.close();
-        } else if (error != null) {
-          if (!completer.isCompleted) completer.completeError(Exception(error));
-          webview.close();
+          request.response
+            ..statusCode = 200
+            ..headers.contentType = ContentType.html
+            ..write('''
+              <html>
+                <body style="font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #0C0E13; color: white;">
+                  <h2 style="color: ${code != null ? '#4CAF50' : '#F44336'};">${code != null ? 'Authentication Successful!' : 'Authentication Failed'}</h2>
+                  <p>You can close this window and return to Meridix Launcher.</p>
+                  <script>window.close();</script>
+                </body>
+              </html>
+            ''');
+          await request.response.close();
+
+          if (code != null && !completer.isCompleted) {
+            completer.complete(code);
+          } else if (error != null && !completer.isCompleted) {
+            completer.completeError(Exception(error));
+          }
+        } catch (e) {
+          request.response
+            ..statusCode = 400
+            ..write('Invalid URL format. Please try again.');
+          await request.response.close();
         }
+        
+        server.close(force: true);
+      } else {
+        // Serve the beautiful instruction page
+        request.response
+          ..statusCode = 200
+          ..headers.contentType = ContentType.html
+          ..write('''
+            <html>
+              <head><title>Meridix Launcher Auth</title></head>
+              <body style="font-family: 'Segoe UI', sans-serif; background-color: #0C0E13; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+                <div style="background-color: #1A1D24; padding: 40px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); text-align: center; max-width: 500px;">
+                  <h1 style="margin-top: 0;">Microsoft Sign In</h1>
+                  <p style="color: #A0AABF; margin-bottom: 30px;">Due to a bug in Microsoft's WebView on your PC, we need you to manually copy the login link.</p>
+                  
+                  <div style="text-align: left; margin-bottom: 30px;">
+                    <p><b>Step 1:</b> Click the button below to open Microsoft's login page.</p>
+                    <p><b>Step 2:</b> Log in. When you see a <b>blank white page</b>, copy the entire URL from your address bar.</p>
+                    <p><b>Step 3:</b> Come back to this tab and paste the URL below.</p>
+                  </div>
+
+                  <a href="$authUrl" target="_blank" style="display: inline-block; background-color: #0078D4; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; margin-bottom: 30px;">Open Microsoft Login</a>
+
+                  <form method="POST" action="/" style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="text" name="pasted_url" placeholder="Paste the blank page URL here (https://login.live.com/...)" style="padding: 12px; border-radius: 6px; border: 1px solid #333; background-color: #0C0E13; color: white; width: 100%; box-sizing: border-box;" required>
+                    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">Complete Login</button>
+                  </form>
+                </div>
+              </body>
+            </html>
+          ''');
+        await request.response.close();
       }
-      return false; // allow navigation by default
     });
 
-    webview.onClose.whenComplete(() {
+    // Timeout after 5 minutes
+    Future.delayed(const Duration(minutes: 5), () {
       if (!completer.isCompleted) {
-        completer.completeError(Exception('Login cancelled by user.'));
+        completer.completeError(Exception('Login timed out.'));
+        server.close(force: true);
       }
     });
-
-    webview.launch(url);
 
     return completer.future;
   }
