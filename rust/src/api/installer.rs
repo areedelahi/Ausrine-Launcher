@@ -87,7 +87,7 @@ pub fn install_instance(
     };
 
     let request = InstallRequest {
-        minecraft_version: version,
+        minecraft_version: version.clone(),
         loader: loader_spec,
         java: JavaInstallPolicy::Auto,
     };
