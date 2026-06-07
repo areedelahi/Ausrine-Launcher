@@ -6,6 +6,7 @@ import '../../data/instance_repository.dart';
 import '../models/instance.dart';
 import 'running_instances_provider.dart';
 
+import 'java_runtime_provider.dart';
 import 'instance_provider.dart';
 
 class LaunchService {
@@ -25,7 +26,14 @@ class LaunchService {
     final isOffline = acc.type == 'offline';
 
     // Instance overrides, fallback to global settings
-    final javaExe = instance.javaPath ?? settings.javaExecutable;
+    String? javaExe = instance.javaPath ?? settings.javaExecutable;
+    
+    // Auto-download Java if the user hasn't explicitly set a custom path!
+    if (javaExe == null || javaExe.trim().isEmpty) {
+      final javaService = ref.read(javaRuntimeProvider);
+      final targetVersion = instance.profileId ?? instance.minecraftVersion;
+      javaExe = await javaService.getOrDownloadJavaExecutable(targetVersion);
+    }
     
     final userJvmArgs = instance.jvmArgs ?? settings.jvmArgs ?? '';
     
