@@ -384,6 +384,7 @@ class MsAuthService {
         'client_id': _clientId,
         'grant_type': 'refresh_token',
         'refresh_token': refreshToken,
+        'redirect_uri': _redirectUri,
         'scope': _scopes,
       },
       options: Options(
