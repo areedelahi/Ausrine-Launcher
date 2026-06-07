@@ -8,42 +8,64 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'installer.freezed.dart';
 
-            // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `InstallStage`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `InstallStage`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`, `from`
 
+Stream<DartProgressEvent> installInstance(
+        {required String minecraftDir,
+        required String version,
+        required DartLoaderSpec loader}) =>
+    RustLib.instance.api.crateApiInstallerInstallInstance(
+        minecraftDir: minecraftDir, version: version, loader: loader);
 
-            Stream<DartProgressEvent>  installInstance({required String minecraftDir , required String version , required DartLoaderSpec loader }) => RustLib.instance.api.crateApiInstallerInstallInstance(minecraftDir: minecraftDir, version: version, loader: loader);
-
-Future<String?>  getJavaExecutablePath({required String minecraftDir , required String versionId }) => RustLib.instance.api.crateApiInstallerGetJavaExecutablePath(minecraftDir: minecraftDir, versionId: versionId);
-
-            @freezed
-                sealed class DartLoaderSpec with _$DartLoaderSpec  {
-                    const DartLoaderSpec._();
-
-                     const factory DartLoaderSpec.vanilla() = DartLoaderSpec_Vanilla;
- const factory DartLoaderSpec.fabric({   required String version , }) = DartLoaderSpec_Fabric;
- const factory DartLoaderSpec.forge({   required String version , }) = DartLoaderSpec_Forge;
- const factory DartLoaderSpec.quilt({   required String version , }) = DartLoaderSpec_Quilt;
- const factory DartLoaderSpec.neoForge({   required String version , }) = DartLoaderSpec_NeoForge;
-
-                    
-
-                    
-                }
+Future<String?> getJavaExecutablePath(
+        {required String minecraftDir, required String versionId}) =>
+    RustLib.instance.api.crateApiInstallerGetJavaExecutablePath(
+        minecraftDir: minecraftDir, versionId: versionId);
 
 @freezed
-                sealed class DartProgressEvent with _$DartProgressEvent  {
-                    const DartProgressEvent._();
+sealed class DartLoaderSpec with _$DartLoaderSpec {
+  const DartLoaderSpec._();
 
-                     const factory DartProgressEvent.stageStarted({   required String stage , }) = DartProgressEvent_StageStarted;
- const factory DartProgressEvent.taskStarted({   required String label ,  required String path , }) = DartProgressEvent_TaskStarted;
- const factory DartProgressEvent.taskSkipped({   required String label ,  required String reason , }) = DartProgressEvent_TaskSkipped;
- const factory DartProgressEvent.taskFinished({   required String label , }) = DartProgressEvent_TaskFinished;
- const factory DartProgressEvent.bytesReceived({   required String label ,  required BigInt received ,  BigInt? total , }) = DartProgressEvent_BytesReceived;
- const factory DartProgressEvent.installComplete({   required String versionId , }) = DartProgressEvent_InstallComplete;
+  const factory DartLoaderSpec.vanilla() = DartLoaderSpec_Vanilla;
+  const factory DartLoaderSpec.fabric({
+    required String version,
+  }) = DartLoaderSpec_Fabric;
+  const factory DartLoaderSpec.forge({
+    required String version,
+  }) = DartLoaderSpec_Forge;
+  const factory DartLoaderSpec.quilt({
+    required String version,
+  }) = DartLoaderSpec_Quilt;
+  const factory DartLoaderSpec.neoForge({
+    required String version,
+  }) = DartLoaderSpec_NeoForge;
+}
 
-                    
+@freezed
+sealed class DartProgressEvent with _$DartProgressEvent {
+  const DartProgressEvent._();
 
-                    
-                }
-            
+  const factory DartProgressEvent.stageStarted({
+    required String stage,
+  }) = DartProgressEvent_StageStarted;
+  const factory DartProgressEvent.taskStarted({
+    required String label,
+    required String path,
+  }) = DartProgressEvent_TaskStarted;
+  const factory DartProgressEvent.taskSkipped({
+    required String label,
+    required String reason,
+  }) = DartProgressEvent_TaskSkipped;
+  const factory DartProgressEvent.taskFinished({
+    required String label,
+  }) = DartProgressEvent_TaskFinished;
+  const factory DartProgressEvent.bytesReceived({
+    required String label,
+    required BigInt received,
+    BigInt? total,
+  }) = DartProgressEvent_BytesReceived;
+  const factory DartProgressEvent.installComplete({
+    required String versionId,
+  }) = DartProgressEvent_InstallComplete;
+}

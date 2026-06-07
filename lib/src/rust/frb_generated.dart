@@ -11,838 +11,1248 @@ import 'api/simple.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
-import 'frb_generated.io.dart' if (dart.library.js_interop) 'frb_generated.web.dart';
+import 'frb_generated.io.dart'
+    if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
+/// Main entrypoint of the Rust API
+class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
+  @internal
+  static final instance = RustLib._();
 
-                /// Main entrypoint of the Rust API
-                class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
-                  @internal
-                  static final instance = RustLib._();
+  RustLib._();
 
-                  RustLib._();
+  /// Initialize flutter_rust_bridge
+  static Future<void> init({
+    RustLibApi? api,
+    BaseHandler? handler,
+    ExternalLibrary? externalLibrary,
+    bool forceSameCodegenVersion = true,
+  }) async {
+    await instance.initImpl(
+      api: api,
+      handler: handler,
+      externalLibrary: externalLibrary,
+      forceSameCodegenVersion: forceSameCodegenVersion,
+    );
+  }
 
-                  /// Initialize flutter_rust_bridge
-                  static Future<void> init({
-                    RustLibApi? api,
-                    BaseHandler? handler,
-                    ExternalLibrary? externalLibrary,
-                    bool forceSameCodegenVersion = true,
-                  }) async {
-                    await instance.initImpl(
-                      api: api,
-                      handler: handler,
-                      externalLibrary: externalLibrary,
-                      forceSameCodegenVersion: forceSameCodegenVersion,
-                    );
-                  }
+  /// Initialize flutter_rust_bridge in mock mode.
+  /// No libraries for FFI are loaded.
+  static void initMock({
+    required RustLibApi api,
+  }) {
+    instance.initMockImpl(
+      api: api,
+    );
+  }
 
-                  /// Initialize flutter_rust_bridge in mock mode.
-                  /// No libraries for FFI are loaded.
-                  static void initMock({
-                    required RustLibApi api,
-                  }) {
-                    instance.initMockImpl(
-                      api: api,
-                    );
-                  }
+  /// Dispose flutter_rust_bridge
+  ///
+  /// The call to this function is optional, since flutter_rust_bridge (and everything else)
+  /// is automatically disposed when the app stops.
+  static void dispose() => instance.disposeImpl();
 
-                  /// Dispose flutter_rust_bridge
-                  ///
-                  /// The call to this function is optional, since flutter_rust_bridge (and everything else)
-                  /// is automatically disposed when the app stops.
-                  static void dispose() => instance.disposeImpl();
+  @override
+  ApiImplConstructor<RustLibApiImpl, RustLibWire> get apiImplConstructor =>
+      RustLibApiImpl.new;
 
-                  @override
-                  ApiImplConstructor<RustLibApiImpl, RustLibWire> get apiImplConstructor => RustLibApiImpl.new;
+  @override
+  WireConstructor<RustLibWire> get wireConstructor =>
+      RustLibWire.fromExternalLibrary;
 
-                  @override
-                  WireConstructor<RustLibWire> get wireConstructor => RustLibWire.fromExternalLibrary;
+  @override
+  Future<void> executeRustInitializers() async {
+    await api.crateApiSimpleInitApp();
+  }
 
-                  @override
-                  Future<void> executeRustInitializers() async {
-                    await api.crateApiSimpleInitApp();
+  @override
+  ExternalLibraryLoaderConfig get defaultExternalLibraryLoaderConfig =>
+      kDefaultExternalLibraryLoaderConfig;
 
-                  }
+  @override
+  String get codegenVersion => '2.12.0';
 
-                  @override
-                  ExternalLibraryLoaderConfig get defaultExternalLibraryLoaderConfig => kDefaultExternalLibraryLoaderConfig;
+  @override
+  int get rustContentHash => 812167229;
 
-                  @override
-                  String get codegenVersion => '2.12.0';
+  static const kDefaultExternalLibraryLoaderConfig =
+      ExternalLibraryLoaderConfig(
+    stem: 'rust_lib_liquid_launcher',
+    ioDirectory: 'rust/target/release/',
+    webPrefix: 'pkg/',
+    wasmBindgenName: 'wasm_bindgen',
+  );
+}
 
-                  @override
-                  int get rustContentHash => 812167229;
+abstract class RustLibApi extends BaseApi {
+  Future<List<String>> crateApiMetadataGetFabricLoaders();
 
-                  static const kDefaultExternalLibraryLoaderConfig = ExternalLibraryLoaderConfig(
-                    stem: 'rust_lib_liquid_launcher',
-                    ioDirectory: 'rust/target/release/',
-                    webPrefix: 'pkg/',
-                    wasmBindgenName: 'wasm_bindgen',
-                  );
-                }
-                
+  Future<List<String>> crateApiMetadataGetForgeVersions();
 
-                abstract class RustLibApi extends BaseApi {
-                  Future<List<String>> crateApiMetadataGetFabricLoaders();
+  Future<String?> crateApiInstallerGetJavaExecutablePath(
+      {required String minecraftDir, required String versionId});
 
-Future<List<String>> crateApiMetadataGetForgeVersions();
+  Future<List<String>> crateApiMetadataGetNeoforgeVersions();
 
-Future<String?> crateApiInstallerGetJavaExecutablePath({required String minecraftDir , required String versionId });
+  Future<List<String>> crateApiMetadataGetQuiltLoaders();
 
-Future<List<String>> crateApiMetadataGetNeoforgeVersions();
+  Future<List<VanillaVersion>> crateApiMetadataGetVanillaVersions();
 
-Future<List<String>> crateApiMetadataGetQuiltLoaders();
+  String crateApiSimpleGreet({required String name});
 
-Future<List<VanillaVersion>> crateApiMetadataGetVanillaVersions();
+  Future<void> crateApiSimpleInitApp();
 
-String crateApiSimpleGreet({required String name });
+  Stream<DartProgressEvent> crateApiInstallerInstallInstance(
+      {required String minecraftDir,
+      required String version,
+      required DartLoaderSpec loader});
 
-Future<void> crateApiSimpleInitApp();
+  Future<void> crateApiLauncherKillProcess({required int pid});
 
-Stream<DartProgressEvent> crateApiInstallerInstallInstance({required String minecraftDir , required String version , required DartLoaderSpec loader });
+  Stream<LaunchEvent> crateApiLauncherLaunchInstance(
+      {required String minecraftDir,
+      required String instanceDir,
+      required String versionId,
+      String? javaExecutable,
+      String? jvmArgs,
+      int? ramMb,
+      required bool isOffline,
+      required String accountName,
+      required String accountUuid,
+      required String accountToken});
 
-Future<void> crateApiLauncherKillProcess({required int pid });
+  Future<MinecraftAccount> crateApiAuthPollForTokenAndLogin(
+      {required String deviceCode, required BigInt interval});
 
-Stream<LaunchEvent> crateApiLauncherLaunchInstance({required String minecraftDir , required String instanceDir , required String versionId , String? javaExecutable , String? jvmArgs , int? ramMb , required bool isOffline , required String accountName , required String accountUuid , required String accountToken });
+  Future<DeviceCodeInfo> crateApiAuthRequestDeviceCode();
+}
 
-Future<MinecraftAccount> crateApiAuthPollForTokenAndLogin({required String deviceCode , required BigInt interval });
+class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
+  RustLibApiImpl({
+    required super.handler,
+    required super.wire,
+    required super.generalizedFrbRustBinding,
+    required super.portManager,
+  });
 
-Future<DeviceCodeInfo> crateApiAuthRequestDeviceCode();
+  @override
+  Future<List<String>> crateApiMetadataGetFabricLoaders() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 1, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_String,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMetadataGetFabricLoadersConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
 
+  TaskConstMeta get kCrateApiMetadataGetFabricLoadersConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_fabric_loaders",
+        argNames: [],
+      );
 
-                }
-                
+  @override
+  Future<List<String>> crateApiMetadataGetForgeVersions() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_String,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMetadataGetForgeVersionsConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
 
-                class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
-                  RustLibApiImpl({
-                    required super.handler,
-                    required super.wire,
-                    required super.generalizedFrbRustBinding,
-                    required super.portManager,
-                  });
+  TaskConstMeta get kCrateApiMetadataGetForgeVersionsConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_forge_versions",
+        argNames: [],
+      );
 
-                  @override Future<List<String>> crateApiMetadataGetFabricLoaders()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_list_String,
+  @override
+  Future<String?> crateApiInstallerGetJavaExecutablePath(
+      {required String minecraftDir, required String versionId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(minecraftDir, serializer);
+        sse_encode_String(versionId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 3, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_opt_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiInstallerGetJavaExecutablePathConstMeta,
+      argValues: [minecraftDir, versionId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiInstallerGetJavaExecutablePathConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_java_executable_path",
+        argNames: ["minecraftDir", "versionId"],
+      );
+
+  @override
+  Future<List<String>> crateApiMetadataGetNeoforgeVersions() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 4, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_String,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMetadataGetNeoforgeVersionsConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMetadataGetNeoforgeVersionsConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_neoforge_versions",
+        argNames: [],
+      );
+
+  @override
+  Future<List<String>> crateApiMetadataGetQuiltLoaders() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 5, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_String,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMetadataGetQuiltLoadersConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMetadataGetQuiltLoadersConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_quilt_loaders",
+        argNames: [],
+      );
+
+  @override
+  Future<List<VanillaVersion>> crateApiMetadataGetVanillaVersions() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_vanilla_version,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMetadataGetVanillaVersionsConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMetadataGetVanillaVersionsConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_vanilla_versions",
+        argNames: [],
+      );
+
+  @override
+  String crateApiSimpleGreet({required String name}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(name, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiSimpleGreetConstMeta,
+      argValues: [name],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSimpleGreetConstMeta => const TaskConstMeta(
+        debugName: "greet",
+        argNames: ["name"],
+      );
+
+  @override
+  Future<void> crateApiSimpleInitApp() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 8, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiSimpleInitAppConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiSimpleInitAppConstMeta => const TaskConstMeta(
+        debugName: "init_app",
+        argNames: [],
+      );
+
+  @override
+  Stream<DartProgressEvent> crateApiInstallerInstallInstance(
+      {required String minecraftDir,
+      required String version,
+      required DartLoaderSpec loader}) {
+    final progressSink = RustStreamSink<DartProgressEvent>();
+    unawaited(handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(minecraftDir, serializer);
+        sse_encode_String(version, serializer);
+        sse_encode_box_autoadd_dart_loader_spec(loader, serializer);
+        sse_encode_StreamSink_dart_progress_event_Sse(progressSink, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 9, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiInstallerInstallInstanceConstMeta,
+      argValues: [minecraftDir, version, loader, progressSink],
+      apiImpl: this,
+    )));
+    return progressSink.stream;
+  }
+
+  TaskConstMeta get kCrateApiInstallerInstallInstanceConstMeta =>
+      const TaskConstMeta(
+        debugName: "install_instance",
+        argNames: ["minecraftDir", "version", "loader", "progressSink"],
+      );
+
+  @override
+  Future<void> crateApiLauncherKillProcess({required int pid}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_u_32(pid, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 10, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiLauncherKillProcessConstMeta,
+      argValues: [pid],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiLauncherKillProcessConstMeta =>
+      const TaskConstMeta(
+        debugName: "kill_process",
+        argNames: ["pid"],
+      );
+
+  @override
+  Stream<LaunchEvent> crateApiLauncherLaunchInstance(
+      {required String minecraftDir,
+      required String instanceDir,
+      required String versionId,
+      String? javaExecutable,
+      String? jvmArgs,
+      int? ramMb,
+      required bool isOffline,
+      required String accountName,
+      required String accountUuid,
+      required String accountToken}) {
+    final sink = RustStreamSink<LaunchEvent>();
+    unawaited(handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(minecraftDir, serializer);
+        sse_encode_String(instanceDir, serializer);
+        sse_encode_String(versionId, serializer);
+        sse_encode_opt_String(javaExecutable, serializer);
+        sse_encode_opt_String(jvmArgs, serializer);
+        sse_encode_opt_box_autoadd_u_32(ramMb, serializer);
+        sse_encode_bool(isOffline, serializer);
+        sse_encode_String(accountName, serializer);
+        sse_encode_String(accountUuid, serializer);
+        sse_encode_String(accountToken, serializer);
+        sse_encode_StreamSink_launch_event_Sse(sink, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 11, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiLauncherLaunchInstanceConstMeta,
+      argValues: [
+        minecraftDir,
+        instanceDir,
+        versionId,
+        javaExecutable,
+        jvmArgs,
+        ramMb,
+        isOffline,
+        accountName,
+        accountUuid,
+        accountToken,
+        sink
+      ],
+      apiImpl: this,
+    )));
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiLauncherLaunchInstanceConstMeta =>
+      const TaskConstMeta(
+        debugName: "launch_instance",
+        argNames: [
+          "minecraftDir",
+          "instanceDir",
+          "versionId",
+          "javaExecutable",
+          "jvmArgs",
+          "ramMb",
+          "isOffline",
+          "accountName",
+          "accountUuid",
+          "accountToken",
+          "sink"
+        ],
+      );
+
+  @override
+  Future<MinecraftAccount> crateApiAuthPollForTokenAndLogin(
+      {required String deviceCode, required BigInt interval}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(deviceCode, serializer);
+        sse_encode_u_64(interval, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 12, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_minecraft_account,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiAuthPollForTokenAndLoginConstMeta,
+      argValues: [deviceCode, interval],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiAuthPollForTokenAndLoginConstMeta =>
+      const TaskConstMeta(
+        debugName: "poll_for_token_and_login",
+        argNames: ["deviceCode", "interval"],
+      );
+
+  @override
+  Future<DeviceCodeInfo> crateApiAuthRequestDeviceCode() {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 13, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_device_code_info,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiAuthRequestDeviceCodeConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiAuthRequestDeviceCodeConstMeta =>
+      const TaskConstMeta(
+        debugName: "request_device_code",
+        argNames: [],
+      );
+
+  @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return AnyhowException(raw as String);
+  }
+
+  @protected
+  RustStreamSink<DartProgressEvent>
+      dco_decode_StreamSink_dart_progress_event_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  RustStreamSink<LaunchEvent> dco_decode_StreamSink_launch_event_Sse(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
+  }
+
+  @protected
+  String dco_decode_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as String;
+  }
+
+  @protected
+  bool dco_decode_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as bool;
+  }
+
+  @protected
+  DartLoaderSpec dco_decode_box_autoadd_dart_loader_spec(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_dart_loader_spec(raw);
+  }
+
+  @protected
+  int dco_decode_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  BigInt dco_decode_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_u_64(raw);
+  }
+
+  @protected
+  DartLoaderSpec dco_decode_dart_loader_spec(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return const DartLoaderSpec_Vanilla();
+      case 1:
+        return DartLoaderSpec_Fabric(
+          version: dco_decode_String(raw[1]),
+        );
+      case 2:
+        return DartLoaderSpec_Forge(
+          version: dco_decode_String(raw[1]),
+        );
+      case 3:
+        return DartLoaderSpec_Quilt(
+          version: dco_decode_String(raw[1]),
+        );
+      case 4:
+        return DartLoaderSpec_NeoForge(
+          version: dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  DartProgressEvent dco_decode_dart_progress_event(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return DartProgressEvent_StageStarted(
+          stage: dco_decode_String(raw[1]),
+        );
+      case 1:
+        return DartProgressEvent_TaskStarted(
+          label: dco_decode_String(raw[1]),
+          path: dco_decode_String(raw[2]),
+        );
+      case 2:
+        return DartProgressEvent_TaskSkipped(
+          label: dco_decode_String(raw[1]),
+          reason: dco_decode_String(raw[2]),
+        );
+      case 3:
+        return DartProgressEvent_TaskFinished(
+          label: dco_decode_String(raw[1]),
+        );
+      case 4:
+        return DartProgressEvent_BytesReceived(
+          label: dco_decode_String(raw[1]),
+          received: dco_decode_u_64(raw[2]),
+          total: dco_decode_opt_box_autoadd_u_64(raw[3]),
+        );
+      case 5:
+        return DartProgressEvent_InstallComplete(
+          versionId: dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  DeviceCodeInfo dco_decode_device_code_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return DeviceCodeInfo(
+      userCode: dco_decode_String(arr[0]),
+      deviceCode: dco_decode_String(arr[1]),
+      verificationUri: dco_decode_String(arr[2]),
+      expiresIn: dco_decode_u_64(arr[3]),
+      interval: dco_decode_u_64(arr[4]),
+    );
+  }
+
+  @protected
+  int dco_decode_i_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  LaunchEvent dco_decode_launch_event(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return LaunchEvent_Started(
+          pid: dco_decode_u_32(raw[1]),
+        );
+      case 1:
+        return LaunchEvent_Exited(
+          code: dco_decode_i_32(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  List<String> dco_decode_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_String).toList();
+  }
+
+  @protected
+  Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as Uint8List;
+  }
+
+  @protected
+  List<VanillaVersion> dco_decode_list_vanilla_version(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_vanilla_version).toList();
+  }
+
+  @protected
+  MinecraftAccount dco_decode_minecraft_account(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return MinecraftAccount(
+      uuid: dco_decode_String(arr[0]),
+      username: dco_decode_String(arr[1]),
+      accessToken: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  int? dco_decode_opt_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_32(raw);
+  }
+
+  @protected
+  BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
+  }
+
+  @protected
+  int dco_decode_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  BigInt dco_decode_u_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
+  int dco_decode_u_8(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
+  }
+
+  @protected
+  void dco_decode_unit(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return;
+  }
+
+  @protected
+  VanillaVersion dco_decode_vanilla_version(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return VanillaVersion(
+      id: dco_decode_String(arr[0]),
+      versionType: dco_decode_String(arr[1]),
+    );
+  }
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_String(deserializer);
+    return AnyhowException(inner);
+  }
+
+  @protected
+  RustStreamSink<DartProgressEvent>
+      sse_decode_StreamSink_dart_progress_event_Sse(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
+  RustStreamSink<LaunchEvent> sse_decode_StreamSink_launch_event_Sse(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
+  String sse_decode_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_list_prim_u_8_strict(deserializer);
+    return utf8.decoder.convert(inner);
+  }
+
+  @protected
+  bool sse_decode_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
+  DartLoaderSpec sse_decode_box_autoadd_dart_loader_spec(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_dart_loader_spec(deserializer));
+  }
+
+  @protected
+  int sse_decode_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_u_32(deserializer));
+  }
+
+  @protected
+  BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_u_64(deserializer));
+  }
+
+  @protected
+  DartLoaderSpec sse_decode_dart_loader_spec(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return const DartLoaderSpec_Vanilla();
+      case 1:
+        var var_version = sse_decode_String(deserializer);
+        return DartLoaderSpec_Fabric(version: var_version);
+      case 2:
+        var var_version = sse_decode_String(deserializer);
+        return DartLoaderSpec_Forge(version: var_version);
+      case 3:
+        var var_version = sse_decode_String(deserializer);
+        return DartLoaderSpec_Quilt(version: var_version);
+      case 4:
+        var var_version = sse_decode_String(deserializer);
+        return DartLoaderSpec_NeoForge(version: var_version);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  DartProgressEvent sse_decode_dart_progress_event(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_stage = sse_decode_String(deserializer);
+        return DartProgressEvent_StageStarted(stage: var_stage);
+      case 1:
+        var var_label = sse_decode_String(deserializer);
+        var var_path = sse_decode_String(deserializer);
+        return DartProgressEvent_TaskStarted(label: var_label, path: var_path);
+      case 2:
+        var var_label = sse_decode_String(deserializer);
+        var var_reason = sse_decode_String(deserializer);
+        return DartProgressEvent_TaskSkipped(
+            label: var_label, reason: var_reason);
+      case 3:
+        var var_label = sse_decode_String(deserializer);
+        return DartProgressEvent_TaskFinished(label: var_label);
+      case 4:
+        var var_label = sse_decode_String(deserializer);
+        var var_received = sse_decode_u_64(deserializer);
+        var var_total = sse_decode_opt_box_autoadd_u_64(deserializer);
+        return DartProgressEvent_BytesReceived(
+            label: var_label, received: var_received, total: var_total);
+      case 5:
+        var var_versionId = sse_decode_String(deserializer);
+        return DartProgressEvent_InstallComplete(versionId: var_versionId);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  DeviceCodeInfo sse_decode_device_code_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_userCode = sse_decode_String(deserializer);
+    var var_deviceCode = sse_decode_String(deserializer);
+    var var_verificationUri = sse_decode_String(deserializer);
+    var var_expiresIn = sse_decode_u_64(deserializer);
+    var var_interval = sse_decode_u_64(deserializer);
+    return DeviceCodeInfo(
+        userCode: var_userCode,
+        deviceCode: var_deviceCode,
+        verificationUri: var_verificationUri,
+        expiresIn: var_expiresIn,
+        interval: var_interval);
+  }
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  LaunchEvent sse_decode_launch_event(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_pid = sse_decode_u_32(deserializer);
+        return LaunchEvent_Started(pid: var_pid);
+      case 1:
+        var var_code = sse_decode_i_32(deserializer);
+        return LaunchEvent_Exited(code: var_code);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  List<String> sse_decode_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <String>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_String(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  List<VanillaVersion> sse_decode_list_vanilla_version(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <VanillaVersion>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_vanilla_version(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  MinecraftAccount sse_decode_minecraft_account(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_uuid = sse_decode_String(deserializer);
+    var var_username = sse_decode_String(deserializer);
+    var var_accessToken = sse_decode_String(deserializer);
+    return MinecraftAccount(
+        uuid: var_uuid, username: var_username, accessToken: var_accessToken);
+  }
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  int? sse_decode_opt_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_u_32(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_u_64(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  int sse_decode_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint32();
+  }
+
+  @protected
+  BigInt sse_decode_u_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
+  int sse_decode_u_8(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8();
+  }
+
+  @protected
+  void sse_decode_unit(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  VanillaVersion sse_decode_vanilla_version(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_id = sse_decode_String(deserializer);
+    var var_versionType = sse_decode_String(deserializer);
+    return VanillaVersion(id: var_id, versionType: var_versionType);
+  }
+
+  @protected
+  void sse_encode_AnyhowException(
+      AnyhowException self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.message, serializer);
+  }
+
+  @protected
+  void sse_encode_StreamSink_dart_progress_event_Sse(
+      RustStreamSink<DartProgressEvent> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+        self.setupAndSerialize(
+            codec: SseCodec(
+          decodeSuccessData: sse_decode_dart_progress_event,
           decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiMetadataGetFabricLoadersConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
+        )),
+        serializer);
+  }
 
-
-        TaskConstMeta get kCrateApiMetadataGetFabricLoadersConstMeta => const TaskConstMeta(
-            debugName: "get_fabric_loaders",
-            argNames: [],
-        );
-        
-
-@override Future<List<String>> crateApiMetadataGetForgeVersions()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_list_String,
+  @protected
+  void sse_encode_StreamSink_launch_event_Sse(
+      RustStreamSink<LaunchEvent> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+        self.setupAndSerialize(
+            codec: SseCodec(
+          decodeSuccessData: sse_decode_launch_event,
           decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiMetadataGetForgeVersionsConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiMetadataGetForgeVersionsConstMeta => const TaskConstMeta(
-            debugName: "get_forge_versions",
-            argNames: [],
-        );
-        
-
-@override Future<String?> crateApiInstallerGetJavaExecutablePath({required String minecraftDir , required String versionId })  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_String(minecraftDir, serializer);
-sse_encode_String(versionId, serializer);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: null,
-        )
-        ,
-            constMeta: kCrateApiInstallerGetJavaExecutablePathConstMeta,
-            argValues: [minecraftDir, versionId],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiInstallerGetJavaExecutablePathConstMeta => const TaskConstMeta(
-            debugName: "get_java_executable_path",
-            argNames: ["minecraftDir", "versionId"],
-        );
-        
-
-@override Future<List<String>> crateApiMetadataGetNeoforgeVersions()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_list_String,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiMetadataGetNeoforgeVersionsConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiMetadataGetNeoforgeVersionsConstMeta => const TaskConstMeta(
-            debugName: "get_neoforge_versions",
-            argNames: [],
-        );
-        
-
-@override Future<List<String>> crateApiMetadataGetQuiltLoaders()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_list_String,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiMetadataGetQuiltLoadersConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiMetadataGetQuiltLoadersConstMeta => const TaskConstMeta(
-            debugName: "get_quilt_loaders",
-            argNames: [],
-        );
-        
-
-@override Future<List<VanillaVersion>> crateApiMetadataGetVanillaVersions()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_list_vanilla_version,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiMetadataGetVanillaVersionsConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiMetadataGetVanillaVersionsConstMeta => const TaskConstMeta(
-            debugName: "get_vanilla_versions",
-            argNames: [],
-        );
-        
-
-@override String crateApiSimpleGreet({required String name })  { return handler.executeSync(SyncTask(
-            callFfi: () {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_String(name, serializer);
-            return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: null,
-        )
-        ,
-            constMeta: kCrateApiSimpleGreetConstMeta,
-            argValues: [name],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiSimpleGreetConstMeta => const TaskConstMeta(
-            debugName: "greet",
-            argNames: ["name"],
-        );
-        
-
-@override Future<void> crateApiSimpleInitApp()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        )
-        ,
-            constMeta: kCrateApiSimpleInitAppConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiSimpleInitAppConstMeta => const TaskConstMeta(
-            debugName: "init_app",
-            argNames: [],
-        );
-        
-
-@override Stream<DartProgressEvent> crateApiInstallerInstallInstance({required String minecraftDir , required String version , required DartLoaderSpec loader })  { 
-            final progressSink = RustStreamSink<DartProgressEvent>();
-            unawaited(handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_String(minecraftDir, serializer);
-sse_encode_String(version, serializer);
-sse_encode_box_autoadd_dart_loader_spec(loader, serializer);
-sse_encode_StreamSink_dart_progress_event_Sse(progressSink, serializer);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiInstallerInstallInstanceConstMeta,
-            argValues: [minecraftDir, version, loader, progressSink],
-            apiImpl: this,
-        )));
-            return progressSink.stream;
-             }
-
-
-        TaskConstMeta get kCrateApiInstallerInstallInstanceConstMeta => const TaskConstMeta(
-            debugName: "install_instance",
-            argNames: ["minecraftDir", "version", "loader", "progressSink"],
-        );
-        
-
-@override Future<void> crateApiLauncherKillProcess({required int pid })  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_u_32(pid, serializer);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: null,
-        )
-        ,
-            constMeta: kCrateApiLauncherKillProcessConstMeta,
-            argValues: [pid],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiLauncherKillProcessConstMeta => const TaskConstMeta(
-            debugName: "kill_process",
-            argNames: ["pid"],
-        );
-        
-
-@override Stream<LaunchEvent> crateApiLauncherLaunchInstance({required String minecraftDir , required String instanceDir , required String versionId , String? javaExecutable , String? jvmArgs , int? ramMb , required bool isOffline , required String accountName , required String accountUuid , required String accountToken })  { 
-            final sink = RustStreamSink<LaunchEvent>();
-            unawaited(handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_String(minecraftDir, serializer);
-sse_encode_String(instanceDir, serializer);
-sse_encode_String(versionId, serializer);
-sse_encode_opt_String(javaExecutable, serializer);
-sse_encode_opt_String(jvmArgs, serializer);
-sse_encode_opt_box_autoadd_u_32(ramMb, serializer);
-sse_encode_bool(isOffline, serializer);
-sse_encode_String(accountName, serializer);
-sse_encode_String(accountUuid, serializer);
-sse_encode_String(accountToken, serializer);
-sse_encode_StreamSink_launch_event_Sse(sink, serializer);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiLauncherLaunchInstanceConstMeta,
-            argValues: [minecraftDir, instanceDir, versionId, javaExecutable, jvmArgs, ramMb, isOffline, accountName, accountUuid, accountToken, sink],
-            apiImpl: this,
-        )));
-            return sink.stream;
-             }
-
-
-        TaskConstMeta get kCrateApiLauncherLaunchInstanceConstMeta => const TaskConstMeta(
-            debugName: "launch_instance",
-            argNames: ["minecraftDir", "instanceDir", "versionId", "javaExecutable", "jvmArgs", "ramMb", "isOffline", "accountName", "accountUuid", "accountToken", "sink"],
-        );
-        
-
-@override Future<MinecraftAccount> crateApiAuthPollForTokenAndLogin({required String deviceCode , required BigInt interval })  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);sse_encode_String(deviceCode, serializer);
-sse_encode_u_64(interval, serializer);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_minecraft_account,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiAuthPollForTokenAndLoginConstMeta,
-            argValues: [deviceCode, interval],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiAuthPollForTokenAndLoginConstMeta => const TaskConstMeta(
-            debugName: "poll_for_token_and_login",
-            argNames: ["deviceCode", "interval"],
-        );
-        
-
-@override Future<DeviceCodeInfo> crateApiAuthRequestDeviceCode()  { return handler.executeNormal(NormalTask(
-            callFfi: (port_) {
-              
-            final serializer = SseSerializer(generalizedFrbRustBinding);
-            pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13, port: port_);
-            
-            },
-            codec: 
-        SseCodec(
-          decodeSuccessData: sse_decode_device_code_info,
-          decodeErrorData: sse_decode_AnyhowException,
-        )
-        ,
-            constMeta: kCrateApiAuthRequestDeviceCodeConstMeta,
-            argValues: [],
-            apiImpl: this,
-        )); }
-
-
-        TaskConstMeta get kCrateApiAuthRequestDeviceCodeConstMeta => const TaskConstMeta(
-            debugName: "request_device_code",
-            argNames: [],
-        );
-        
-
-
-
-                  @protected AnyhowException dco_decode_AnyhowException(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return AnyhowException(raw as String); }
-
-@protected RustStreamSink<DartProgressEvent> dco_decode_StreamSink_dart_progress_event_Sse(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-throw UnimplementedError(); }
-
-@protected RustStreamSink<LaunchEvent> dco_decode_StreamSink_launch_event_Sse(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-throw UnimplementedError(); }
-
-@protected String dco_decode_String(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as String; }
-
-@protected bool dco_decode_bool(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as bool; }
-
-@protected DartLoaderSpec dco_decode_box_autoadd_dart_loader_spec(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return dco_decode_dart_loader_spec(raw); }
-
-@protected int dco_decode_box_autoadd_u_32(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as int; }
-
-@protected BigInt dco_decode_box_autoadd_u_64(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return dco_decode_u_64(raw); }
-
-@protected DartLoaderSpec dco_decode_dart_loader_spec(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-switch (raw[0]) {
-                case 0: return DartLoaderSpec_Vanilla();
-case 1: return DartLoaderSpec_Fabric(version: dco_decode_String(raw[1]),);
-case 2: return DartLoaderSpec_Forge(version: dco_decode_String(raw[1]),);
-case 3: return DartLoaderSpec_Quilt(version: dco_decode_String(raw[1]),);
-case 4: return DartLoaderSpec_NeoForge(version: dco_decode_String(raw[1]),);
-                default: throw Exception("unreachable");
-            } }
-
-@protected DartProgressEvent dco_decode_dart_progress_event(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-switch (raw[0]) {
-                case 0: return DartProgressEvent_StageStarted(stage: dco_decode_String(raw[1]),);
-case 1: return DartProgressEvent_TaskStarted(label: dco_decode_String(raw[1]),path: dco_decode_String(raw[2]),);
-case 2: return DartProgressEvent_TaskSkipped(label: dco_decode_String(raw[1]),reason: dco_decode_String(raw[2]),);
-case 3: return DartProgressEvent_TaskFinished(label: dco_decode_String(raw[1]),);
-case 4: return DartProgressEvent_BytesReceived(label: dco_decode_String(raw[1]),received: dco_decode_u_64(raw[2]),total: dco_decode_opt_box_autoadd_u_64(raw[3]),);
-case 5: return DartProgressEvent_InstallComplete(versionId: dco_decode_String(raw[1]),);
-                default: throw Exception("unreachable");
-            } }
-
-@protected DeviceCodeInfo dco_decode_device_code_info(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-final arr = raw as List<dynamic>;
-                if (arr.length != 5) throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-                return DeviceCodeInfo(userCode: dco_decode_String(arr[0]),
-deviceCode: dco_decode_String(arr[1]),
-verificationUri: dco_decode_String(arr[2]),
-expiresIn: dco_decode_u_64(arr[3]),
-interval: dco_decode_u_64(arr[4]),); }
-
-@protected int dco_decode_i_32(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as int; }
-
-@protected LaunchEvent dco_decode_launch_event(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-switch (raw[0]) {
-                case 0: return LaunchEvent_Started(pid: dco_decode_u_32(raw[1]),);
-case 1: return LaunchEvent_Exited(code: dco_decode_i_32(raw[1]),);
-                default: throw Exception("unreachable");
-            } }
-
-@protected List<String> dco_decode_list_String(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return (raw as List<dynamic>).map(dco_decode_String).toList(); }
-
-@protected Uint8List dco_decode_list_prim_u_8_strict(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as Uint8List; }
-
-@protected List<VanillaVersion> dco_decode_list_vanilla_version(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return (raw as List<dynamic>).map(dco_decode_vanilla_version).toList(); }
-
-@protected MinecraftAccount dco_decode_minecraft_account(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-final arr = raw as List<dynamic>;
-                if (arr.length != 3) throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
-                return MinecraftAccount(uuid: dco_decode_String(arr[0]),
-username: dco_decode_String(arr[1]),
-accessToken: dco_decode_String(arr[2]),); }
-
-@protected String? dco_decode_opt_String(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw == null ? null : dco_decode_String(raw); }
-
-@protected int? dco_decode_opt_box_autoadd_u_32(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw == null ? null : dco_decode_box_autoadd_u_32(raw); }
-
-@protected BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw == null ? null : dco_decode_box_autoadd_u_64(raw); }
-
-@protected int dco_decode_u_32(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as int; }
-
-@protected BigInt dco_decode_u_64(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return dcoDecodeU64(raw); }
-
-@protected int dco_decode_u_8(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return raw as int; }
-
-@protected void dco_decode_unit(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-return; }
-
-@protected VanillaVersion dco_decode_vanilla_version(dynamic raw){ // Codec=Dco (DartCObject based), see doc to use other codecs
-final arr = raw as List<dynamic>;
-                if (arr.length != 2) throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-                return VanillaVersion(id: dco_decode_String(arr[0]),
-versionType: dco_decode_String(arr[1]),); }
-
-@protected AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var inner = sse_decode_String(deserializer);
-        return AnyhowException(inner); }
-
-@protected RustStreamSink<DartProgressEvent> sse_decode_StreamSink_dart_progress_event_Sse(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-throw UnimplementedError('Unreachable ()'); }
-
-@protected RustStreamSink<LaunchEvent> sse_decode_StreamSink_launch_event_Sse(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-throw UnimplementedError('Unreachable ()'); }
-
-@protected String sse_decode_String(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var inner = sse_decode_list_prim_u_8_strict(deserializer);
-        return utf8.decoder.convert(inner); }
-
-@protected bool sse_decode_bool(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return deserializer.buffer.getUint8() != 0; }
-
-@protected DartLoaderSpec sse_decode_box_autoadd_dart_loader_spec(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return (sse_decode_dart_loader_spec(deserializer)); }
-
-@protected int sse_decode_box_autoadd_u_32(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return (sse_decode_u_32(deserializer)); }
-
-@protected BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return (sse_decode_u_64(deserializer)); }
-
-@protected DartLoaderSpec sse_decode_dart_loader_spec(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            var tag_ = sse_decode_i_32(deserializer);
-            switch (tag_) { case 0: return DartLoaderSpec_Vanilla();case 1: var var_version = sse_decode_String(deserializer);
-return DartLoaderSpec_Fabric(version: var_version);case 2: var var_version = sse_decode_String(deserializer);
-return DartLoaderSpec_Forge(version: var_version);case 3: var var_version = sse_decode_String(deserializer);
-return DartLoaderSpec_Quilt(version: var_version);case 4: var var_version = sse_decode_String(deserializer);
-return DartLoaderSpec_NeoForge(version: var_version); default: throw UnimplementedError(''); }
-             }
-
-@protected DartProgressEvent sse_decode_dart_progress_event(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            var tag_ = sse_decode_i_32(deserializer);
-            switch (tag_) { case 0: var var_stage = sse_decode_String(deserializer);
-return DartProgressEvent_StageStarted(stage: var_stage);case 1: var var_label = sse_decode_String(deserializer);
-var var_path = sse_decode_String(deserializer);
-return DartProgressEvent_TaskStarted(label: var_label, path: var_path);case 2: var var_label = sse_decode_String(deserializer);
-var var_reason = sse_decode_String(deserializer);
-return DartProgressEvent_TaskSkipped(label: var_label, reason: var_reason);case 3: var var_label = sse_decode_String(deserializer);
-return DartProgressEvent_TaskFinished(label: var_label);case 4: var var_label = sse_decode_String(deserializer);
-var var_received = sse_decode_u_64(deserializer);
-var var_total = sse_decode_opt_box_autoadd_u_64(deserializer);
-return DartProgressEvent_BytesReceived(label: var_label, received: var_received, total: var_total);case 5: var var_versionId = sse_decode_String(deserializer);
-return DartProgressEvent_InstallComplete(versionId: var_versionId); default: throw UnimplementedError(''); }
-             }
-
-@protected DeviceCodeInfo sse_decode_device_code_info(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var var_userCode = sse_decode_String(deserializer);
-var var_deviceCode = sse_decode_String(deserializer);
-var var_verificationUri = sse_decode_String(deserializer);
-var var_expiresIn = sse_decode_u_64(deserializer);
-var var_interval = sse_decode_u_64(deserializer);
-return DeviceCodeInfo(userCode: var_userCode, deviceCode: var_deviceCode, verificationUri: var_verificationUri, expiresIn: var_expiresIn, interval: var_interval); }
-
-@protected int sse_decode_i_32(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return deserializer.buffer.getInt32(); }
-
-@protected LaunchEvent sse_decode_launch_event(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            var tag_ = sse_decode_i_32(deserializer);
-            switch (tag_) { case 0: var var_pid = sse_decode_u_32(deserializer);
-return LaunchEvent_Started(pid: var_pid);case 1: var var_code = sse_decode_i_32(deserializer);
-return LaunchEvent_Exited(code: var_code); default: throw UnimplementedError(''); }
-             }
-
-@protected List<String> sse_decode_list_String(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-        var len_ = sse_decode_i_32(deserializer);
-        var ans_ = <String>[];
-        for (var idx_ = 0; idx_ < len_; ++idx_) { ans_.add(sse_decode_String(deserializer)); }
-        return ans_;
-         }
-
-@protected Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var len_ = sse_decode_i_32(deserializer);
-                return deserializer.buffer.getUint8List(len_); }
-
-@protected List<VanillaVersion> sse_decode_list_vanilla_version(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-        var len_ = sse_decode_i_32(deserializer);
-        var ans_ = <VanillaVersion>[];
-        for (var idx_ = 0; idx_ < len_; ++idx_) { ans_.add(sse_decode_vanilla_version(deserializer)); }
-        return ans_;
-         }
-
-@protected MinecraftAccount sse_decode_minecraft_account(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var var_uuid = sse_decode_String(deserializer);
-var var_username = sse_decode_String(deserializer);
-var var_accessToken = sse_decode_String(deserializer);
-return MinecraftAccount(uuid: var_uuid, username: var_username, accessToken: var_accessToken); }
-
-@protected String? sse_decode_opt_String(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            if (sse_decode_bool(deserializer)) {
-                return (sse_decode_String(deserializer));
-            } else {
-                return null;
-            }
-             }
-
-@protected int? sse_decode_opt_box_autoadd_u_32(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            if (sse_decode_bool(deserializer)) {
-                return (sse_decode_box_autoadd_u_32(deserializer));
-            } else {
-                return null;
-            }
-             }
-
-@protected BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-            if (sse_decode_bool(deserializer)) {
-                return (sse_decode_box_autoadd_u_64(deserializer));
-            } else {
-                return null;
-            }
-             }
-
-@protected int sse_decode_u_32(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return deserializer.buffer.getUint32(); }
-
-@protected BigInt sse_decode_u_64(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return deserializer.buffer.getBigUint64(); }
-
-@protected int sse_decode_u_8(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-return deserializer.buffer.getUint8(); }
-
-@protected void sse_decode_unit(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
- }
-
-@protected VanillaVersion sse_decode_vanilla_version(SseDeserializer deserializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-var var_id = sse_decode_String(deserializer);
-var var_versionType = sse_decode_String(deserializer);
-return VanillaVersion(id: var_id, versionType: var_versionType); }
-
-@protected void sse_encode_AnyhowException(AnyhowException self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.message, serializer); }
-
-@protected void sse_encode_StreamSink_dart_progress_event_Sse(RustStreamSink<DartProgressEvent> self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.setupAndSerialize(codec: SseCodec(
-            decodeSuccessData: sse_decode_dart_progress_event,
-            decodeErrorData: sse_decode_AnyhowException,
-        )), serializer); }
-
-@protected void sse_encode_StreamSink_launch_event_Sse(RustStreamSink<LaunchEvent> self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.setupAndSerialize(codec: SseCodec(
-            decodeSuccessData: sse_decode_launch_event,
-            decodeErrorData: sse_decode_AnyhowException,
-        )), serializer); }
-
-@protected void sse_encode_String(String self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer); }
-
-@protected void sse_encode_bool(bool self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-serializer.buffer.putUint8(self ? 1 : 0); }
-
-@protected void sse_encode_box_autoadd_dart_loader_spec(DartLoaderSpec self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_dart_loader_spec(self, serializer); }
-
-@protected void sse_encode_box_autoadd_u_32(int self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_u_32(self, serializer); }
-
-@protected void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_u_64(self, serializer); }
-
-@protected void sse_encode_dart_loader_spec(DartLoaderSpec self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-switch (self) { case DartLoaderSpec_Vanilla(): sse_encode_i_32(0, serializer); case DartLoaderSpec_Fabric(version: final version): sse_encode_i_32(1, serializer); sse_encode_String(version, serializer);
-case DartLoaderSpec_Forge(version: final version): sse_encode_i_32(2, serializer); sse_encode_String(version, serializer);
-case DartLoaderSpec_Quilt(version: final version): sse_encode_i_32(3, serializer); sse_encode_String(version, serializer);
-case DartLoaderSpec_NeoForge(version: final version): sse_encode_i_32(4, serializer); sse_encode_String(version, serializer);
-  } }
-
-@protected void sse_encode_dart_progress_event(DartProgressEvent self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-switch (self) { case DartProgressEvent_StageStarted(stage: final stage): sse_encode_i_32(0, serializer); sse_encode_String(stage, serializer);
-case DartProgressEvent_TaskStarted(label: final label,path: final path): sse_encode_i_32(1, serializer); sse_encode_String(label, serializer);
-sse_encode_String(path, serializer);
-case DartProgressEvent_TaskSkipped(label: final label,reason: final reason): sse_encode_i_32(2, serializer); sse_encode_String(label, serializer);
-sse_encode_String(reason, serializer);
-case DartProgressEvent_TaskFinished(label: final label): sse_encode_i_32(3, serializer); sse_encode_String(label, serializer);
-case DartProgressEvent_BytesReceived(label: final label,received: final received,total: final total): sse_encode_i_32(4, serializer); sse_encode_String(label, serializer);
-sse_encode_u_64(received, serializer);
-sse_encode_opt_box_autoadd_u_64(total, serializer);
-case DartProgressEvent_InstallComplete(versionId: final versionId): sse_encode_i_32(5, serializer); sse_encode_String(versionId, serializer);
-  } }
-
-@protected void sse_encode_device_code_info(DeviceCodeInfo self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.userCode, serializer);
-sse_encode_String(self.deviceCode, serializer);
-sse_encode_String(self.verificationUri, serializer);
-sse_encode_u_64(self.expiresIn, serializer);
-sse_encode_u_64(self.interval, serializer);
- }
-
-@protected void sse_encode_i_32(int self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-serializer.buffer.putInt32(self); }
-
-@protected void sse_encode_launch_event(LaunchEvent self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-switch (self) { case LaunchEvent_Started(pid: final pid): sse_encode_i_32(0, serializer); sse_encode_u_32(pid, serializer);
-case LaunchEvent_Exited(code: final code): sse_encode_i_32(1, serializer); sse_encode_i_32(code, serializer);
-  } }
-
-@protected void sse_encode_list_String(List<String> self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_i_32(self.length, serializer);
-        for (final item in self) { sse_encode_String(item, serializer); } }
-
-@protected void sse_encode_list_prim_u_8_strict(Uint8List self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_i_32(self.length, serializer);
-                    serializer.buffer.putUint8List(self); }
-
-@protected void sse_encode_list_vanilla_version(List<VanillaVersion> self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_i_32(self.length, serializer);
-        for (final item in self) { sse_encode_vanilla_version(item, serializer); } }
-
-@protected void sse_encode_minecraft_account(MinecraftAccount self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.uuid, serializer);
-sse_encode_String(self.username, serializer);
-sse_encode_String(self.accessToken, serializer);
- }
-
-@protected void sse_encode_opt_String(String? self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-                sse_encode_bool(self != null, serializer);
-                if (self != null) {
-                    sse_encode_String(self, serializer);
-                }
-                 }
-
-@protected void sse_encode_opt_box_autoadd_u_32(int? self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-                sse_encode_bool(self != null, serializer);
-                if (self != null) {
-                    sse_encode_box_autoadd_u_32(self, serializer);
-                }
-                 }
-
-@protected void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-
-                sse_encode_bool(self != null, serializer);
-                if (self != null) {
-                    sse_encode_box_autoadd_u_64(self, serializer);
-                }
-                 }
-
-@protected void sse_encode_u_32(int self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-serializer.buffer.putUint32(self); }
-
-@protected void sse_encode_u_64(BigInt self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-serializer.buffer.putBigUint64(self); }
-
-@protected void sse_encode_u_8(int self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-serializer.buffer.putUint8(self); }
-
-@protected void sse_encode_unit(void self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
- }
-
-@protected void sse_encode_vanilla_version(VanillaVersion self, SseSerializer serializer){ // Codec=Sse (Serialization based), see doc to use other codecs
-sse_encode_String(self.id, serializer);
-sse_encode_String(self.versionType, serializer);
- }
-                }
-                
+        )),
+        serializer);
+  }
+
+  @protected
+  void sse_encode_String(String self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self ? 1 : 0);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_dart_loader_spec(
+      DartLoaderSpec self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_dart_loader_spec(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_u_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_32(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_64(self, serializer);
+  }
+
+  @protected
+  void sse_encode_dart_loader_spec(
+      DartLoaderSpec self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case DartLoaderSpec_Vanilla():
+        sse_encode_i_32(0, serializer);
+      case DartLoaderSpec_Fabric(version: final version):
+        sse_encode_i_32(1, serializer);
+        sse_encode_String(version, serializer);
+      case DartLoaderSpec_Forge(version: final version):
+        sse_encode_i_32(2, serializer);
+        sse_encode_String(version, serializer);
+      case DartLoaderSpec_Quilt(version: final version):
+        sse_encode_i_32(3, serializer);
+        sse_encode_String(version, serializer);
+      case DartLoaderSpec_NeoForge(version: final version):
+        sse_encode_i_32(4, serializer);
+        sse_encode_String(version, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_dart_progress_event(
+      DartProgressEvent self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case DartProgressEvent_StageStarted(stage: final stage):
+        sse_encode_i_32(0, serializer);
+        sse_encode_String(stage, serializer);
+      case DartProgressEvent_TaskStarted(label: final label, path: final path):
+        sse_encode_i_32(1, serializer);
+        sse_encode_String(label, serializer);
+        sse_encode_String(path, serializer);
+      case DartProgressEvent_TaskSkipped(
+          label: final label,
+          reason: final reason
+        ):
+        sse_encode_i_32(2, serializer);
+        sse_encode_String(label, serializer);
+        sse_encode_String(reason, serializer);
+      case DartProgressEvent_TaskFinished(label: final label):
+        sse_encode_i_32(3, serializer);
+        sse_encode_String(label, serializer);
+      case DartProgressEvent_BytesReceived(
+          label: final label,
+          received: final received,
+          total: final total
+        ):
+        sse_encode_i_32(4, serializer);
+        sse_encode_String(label, serializer);
+        sse_encode_u_64(received, serializer);
+        sse_encode_opt_box_autoadd_u_64(total, serializer);
+      case DartProgressEvent_InstallComplete(versionId: final versionId):
+        sse_encode_i_32(5, serializer);
+        sse_encode_String(versionId, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_device_code_info(
+      DeviceCodeInfo self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.userCode, serializer);
+    sse_encode_String(self.deviceCode, serializer);
+    sse_encode_String(self.verificationUri, serializer);
+    sse_encode_u_64(self.expiresIn, serializer);
+    sse_encode_u_64(self.interval, serializer);
+  }
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putInt32(self);
+  }
+
+  @protected
+  void sse_encode_launch_event(LaunchEvent self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case LaunchEvent_Started(pid: final pid):
+        sse_encode_i_32(0, serializer);
+        sse_encode_u_32(pid, serializer);
+      case LaunchEvent_Exited(code: final code):
+        sse_encode_i_32(1, serializer);
+        sse_encode_i_32(code, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_String(List<String> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_String(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_prim_u_8_strict(
+      Uint8List self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_list_vanilla_version(
+      List<VanillaVersion> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_vanilla_version(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_minecraft_account(
+      MinecraftAccount self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.uuid, serializer);
+    sse_encode_String(self.username, serializer);
+    sse_encode_String(self.accessToken, serializer);
+  }
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_32(int? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_32(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_64(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_u_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint32(self);
+  }
+
+  @protected
+  void sse_encode_u_64(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
+  void sse_encode_u_8(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self);
+  }
+
+  @protected
+  void sse_encode_unit(void self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+  }
+
+  @protected
+  void sse_encode_vanilla_version(
+      VanillaVersion self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.id, serializer);
+    sse_encode_String(self.versionType, serializer);
+  }
+}

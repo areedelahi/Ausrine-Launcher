@@ -8,21 +8,40 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'launcher.freezed.dart';
 
-            
+Stream<LaunchEvent> launchInstance(
+        {required String minecraftDir,
+        required String instanceDir,
+        required String versionId,
+        String? javaExecutable,
+        String? jvmArgs,
+        int? ramMb,
+        required bool isOffline,
+        required String accountName,
+        required String accountUuid,
+        required String accountToken}) =>
+    RustLib.instance.api.crateApiLauncherLaunchInstance(
+        minecraftDir: minecraftDir,
+        instanceDir: instanceDir,
+        versionId: versionId,
+        javaExecutable: javaExecutable,
+        jvmArgs: jvmArgs,
+        ramMb: ramMb,
+        isOffline: isOffline,
+        accountName: accountName,
+        accountUuid: accountUuid,
+        accountToken: accountToken);
 
-            Stream<LaunchEvent>  launchInstance({required String minecraftDir , required String instanceDir , required String versionId , String? javaExecutable , String? jvmArgs , int? ramMb , required bool isOffline , required String accountName , required String accountUuid , required String accountToken }) => RustLib.instance.api.crateApiLauncherLaunchInstance(minecraftDir: minecraftDir, instanceDir: instanceDir, versionId: versionId, javaExecutable: javaExecutable, jvmArgs: jvmArgs, ramMb: ramMb, isOffline: isOffline, accountName: accountName, accountUuid: accountUuid, accountToken: accountToken);
+Future<void> killProcess({required int pid}) =>
+    RustLib.instance.api.crateApiLauncherKillProcess(pid: pid);
 
-Future<void>  killProcess({required int pid }) => RustLib.instance.api.crateApiLauncherKillProcess(pid: pid);
+@freezed
+sealed class LaunchEvent with _$LaunchEvent {
+  const LaunchEvent._();
 
-            @freezed
-                sealed class LaunchEvent with _$LaunchEvent  {
-                    const LaunchEvent._();
-
-                     const factory LaunchEvent.started({   required int pid , }) = LaunchEvent_Started;
- const factory LaunchEvent.exited({   required int code , }) = LaunchEvent_Exited;
-
-                    
-
-                    
-                }
-            
+  const factory LaunchEvent.started({
+    required int pid,
+  }) = LaunchEvent_Started;
+  const factory LaunchEvent.exited({
+    required int code,
+  }) = LaunchEvent_Exited;
+}

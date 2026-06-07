@@ -1,6 +1,11 @@
 use flutter_rust_bridge::frb;
 use mc_launcher_core::prelude::*;
 use std::path::PathBuf;
+use std::cell::RefCell;
+
+thread_local! {
+    static JAVA_DOWNLOAD_PROGRESS_CB: RefCell<Option<Box<dyn FnMut(i32)>>> = RefCell::new(None);
+}
 
 #[frb(mirror(InstallStage))]
 pub enum _InstallStage {
@@ -63,7 +68,7 @@ pub fn install_instance(
     loader: DartLoaderSpec,
     progress_sink: crate::frb_generated::StreamSink<DartProgressEvent>,
 ) -> anyhow::Result<String> {
-    let launcher = Launcher::new(PathBuf::from(minecraft_dir));
+    let launcher = Launcher::new(PathBuf::from(minecraft_dir.clone()));
 
     let loader_spec = match loader {
         DartLoaderSpec::Vanilla => None,
@@ -109,19 +114,36 @@ pub fn install_instance(
         // Setup callbacks for Java downloading
         let sink_clone = progress_sink.clone();
         let jvm_name = jvm_version.clone();
-        let cb = mc_launcher_core::types::CallbackDict {
-            set_max: None,
-            set_progress: Some(Box::new(move |progress| {
+        
+        JAVA_DOWNLOAD_PROGRESS_CB.with(|cb| {
+            *cb.borrow_mut() = Some(Box::new(move |progress| {
                 let _ = sink_clone.add(DartProgressEvent::TaskStarted {
                     label: format!("Extracting {} (File {})", jvm_name, progress),
                     path: "".to_string(),
                 });
-            })),
+            }));
+        });
+
+        let cb = mc_launcher_core::types::CallbackDict {
+            set_max: None,
+            set_status: None,
+            set_progress: Some(|progress| {
+                JAVA_DOWNLOAD_PROGRESS_CB.with(|cb| {
+                    if let Some(f) = cb.borrow_mut().as_mut() {
+                        f(progress);
+                    }
+                });
+            }),
         };
 
         if let Err(e) = mc_launcher_core::runtime::install_jvm_runtime(&jvm_version, &minecraft_dir, &cb) {
             println!("Failed to install Mojang JVM: {}", e);
         }
+        
+        // Clean up the thread-local storage to prevent memory leaks across FFI boundaries
+        JAVA_DOWNLOAD_PROGRESS_CB.with(|cb| {
+            *cb.borrow_mut() = None;
+        });
     }
     // ---- END MOJANG JAVA INSTALLATION ----
 

@@ -6,42 +6,41 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-
-            // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `VanillaManifest`
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `VanillaManifest`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`, `fmt`
 
+Future<List<VanillaVersion>> getVanillaVersions() =>
+    RustLib.instance.api.crateApiMetadataGetVanillaVersions();
 
-            Future<List<VanillaVersion>>  getVanillaVersions() => RustLib.instance.api.crateApiMetadataGetVanillaVersions();
+Future<List<String>> getFabricLoaders() =>
+    RustLib.instance.api.crateApiMetadataGetFabricLoaders();
 
-Future<List<String>>  getFabricLoaders() => RustLib.instance.api.crateApiMetadataGetFabricLoaders();
+Future<List<String>> getQuiltLoaders() =>
+    RustLib.instance.api.crateApiMetadataGetQuiltLoaders();
 
-Future<List<String>>  getQuiltLoaders() => RustLib.instance.api.crateApiMetadataGetQuiltLoaders();
+Future<List<String>> getForgeVersions() =>
+    RustLib.instance.api.crateApiMetadataGetForgeVersions();
 
-Future<List<String>>  getForgeVersions() => RustLib.instance.api.crateApiMetadataGetForgeVersions();
+Future<List<String>> getNeoforgeVersions() =>
+    RustLib.instance.api.crateApiMetadataGetNeoforgeVersions();
 
-Future<List<String>>  getNeoforgeVersions() => RustLib.instance.api.crateApiMetadataGetNeoforgeVersions();
+class VanillaVersion {
+  final String id;
+  final String versionType;
 
-            class VanillaVersion  {
-                final String id;
-final String versionType;
+  const VanillaVersion({
+    required this.id,
+    required this.versionType,
+  });
 
-                const VanillaVersion({required this.id ,required this.versionType ,});
+  @override
+  int get hashCode => id.hashCode ^ versionType.hashCode;
 
-                
-                
-
-                
-        @override
-        int get hashCode => id.hashCode^versionType.hashCode;
-        
-
-                
-        @override
-        bool operator ==(Object other) =>
-            identical(this, other) ||
-            other is VanillaVersion &&
-                runtimeType == other.runtimeType
-                && id == other.id&& versionType == other.versionType;
-        
-            }
-            
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is VanillaVersion &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          versionType == other.versionType;
+}
