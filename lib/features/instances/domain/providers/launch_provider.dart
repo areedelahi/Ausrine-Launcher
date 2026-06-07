@@ -52,53 +52,59 @@ class LaunchService {
         ? (ramArgs.isNotEmpty ? '$ramArgs $userJvmArgs' : userJvmArgs)
         : ramArgs;
 
-    final stream = launchInstance(
-      minecraftDir: await repo.getLauncherRoot(),
-      instanceDir: await repo.getInstancePath(instance.id),
-      versionId: instance.profileId ?? instance.minecraftVersion,
-      javaExecutable: javaExe,
-      jvmArgs: finalJvmArgs,
-      ramMb: null, // We handle RAM manually via jvmArgs to support min/max correctly
-      isOffline: isOffline,
-      accountName: acc.username,
-      accountUuid: acc.uuid,
-      accountToken: acc.accessToken,
-    );
+    try {
+      final stream = launchInstance(
+        minecraftDir: await repo.getLauncherRoot(),
+        instanceDir: await repo.getInstancePath(instance.id),
+        versionId: instance.profileId ?? instance.minecraftVersion,
+        javaExecutable: javaExe,
+        jvmArgs: finalJvmArgs,
+        ramMb: null, // We handle RAM manually via jvmArgs to support min/max correctly
+        isOffline: isOffline,
+        accountName: acc.username,
+        accountUuid: acc.uuid,
+        accountToken: acc.accessToken,
+      );
 
-    DateTime? startTime;
+      DateTime? startTime;
 
-    stream.listen((event) {
-      event.when(
-        started: (pid) {
-          startTime = DateTime.now();
-          ref.read(runningInstancesProvider.notifier).setRunning(instance.id, pid);
-          
-          final currentInstances = ref.read(instancesProvider).value ?? [];
-          final currentInstance = currentInstances.firstWhere((e) => e.id == instance.id, orElse: () => instance);
-          ref.read(instancesProvider.notifier).updateInstance(
-            currentInstance.copyWith(lastPlayed: startTime)
-          );
-        },
-        exited: (code) {
-          ref.read(runningInstancesProvider.notifier).setExited(instance.id);
-          
-          if (startTime != null) {
-            final duration = DateTime.now().difference(startTime!);
+      stream.listen((event) {
+        event.when(
+          started: (pid) {
+            startTime = DateTime.now();
+            ref.read(runningInstancesProvider.notifier).setRunning(instance.id, pid);
+            
             final currentInstances = ref.read(instancesProvider).value ?? [];
             final currentInstance = currentInstances.firstWhere((e) => e.id == instance.id, orElse: () => instance);
             ref.read(instancesProvider.notifier).updateInstance(
-              currentInstance.copyWith(
-                playTimeMs: currentInstance.playTimeMs + duration.inMilliseconds,
-              )
+              currentInstance.copyWith(lastPlayed: startTime)
             );
-          }
-        },
-      );
-    }, onError: (error) {
-      // If there's an error launching (like missing Java, bad version), handle it
+          },
+          exited: (code) {
+            ref.read(runningInstancesProvider.notifier).setExited(instance.id);
+            
+            if (startTime != null) {
+              final duration = DateTime.now().difference(startTime!);
+              final currentInstances = ref.read(instancesProvider).value ?? [];
+              final currentInstance = currentInstances.firstWhere((e) => e.id == instance.id, orElse: () => instance);
+              ref.read(instancesProvider.notifier).updateInstance(
+                currentInstance.copyWith(
+                  playTimeMs: currentInstance.playTimeMs + duration.inMilliseconds,
+                )
+              );
+            }
+          },
+        );
+      }, onError: (error) {
+        ref.read(runningInstancesProvider.notifier).setExited(instance.id);
+        print("Error during active launch stream: $error");
+        throw Exception("Launcher stream failed: $error");
+      });
+    } catch (e) {
       ref.read(runningInstancesProvider.notifier).setExited(instance.id);
-      print("Error launching instance: $error");
-    });
+      print("Failed to start launch process: $e");
+      rethrow; // Rethrow to be caught by the UI button
+    }
   }
 }
 
