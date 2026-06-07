@@ -85,23 +85,23 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
       final sub = stream.listen((event) {
         event.when(
           stageStarted: (stage) {
-            _updateTask(taskId, subtitle: 'Stage: $stage', progress: 0.1);
+            updateTask(taskId, subtitle: 'Stage: $stage', progress: 0.1);
           },
           taskStarted: (label, path) {
-            _updateTask(taskId, subtitle: label);
+            updateTask(taskId, subtitle: label);
           },
           taskSkipped: (label, reason) {
-            _updateTask(taskId, subtitle: 'Skipped $label');
+            updateTask(taskId, subtitle: 'Skipped $label');
           },
           taskFinished: (label) {
-            _updateTask(taskId, subtitle: 'Finished $label');
+            updateTask(taskId, subtitle: 'Finished $label');
           },
           bytesReceived: (label, received, total) {
             if (total != null && total > BigInt.zero) {
               final pct = (received.toDouble() / total.toDouble()).clamp(0.1, 0.9);
-              _updateTask(taskId, subtitle: 'Downloading $label', progress: pct);
+              updateTask(taskId, subtitle: 'Downloading $label', progress: pct);
             } else {
-              _updateTask(taskId, subtitle: 'Downloading $label');
+              updateTask(taskId, subtitle: 'Downloading $label');
             }
           },
           installComplete: (versionId) {
@@ -111,7 +111,7 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
             final currentInstance = currentList.firstWhere((i) => i.id == instance.id, orElse: () => instance);
             notifier.updateInstance(currentInstance.copyWith(profileId: versionId));
             
-            _updateTask(taskId, subtitle: 'Complete!', progress: 1.0);
+            updateTask(taskId, subtitle: 'Complete!', progress: 1.0);
             if (!completer.isCompleted) completer.complete(versionId);
           },
         );
@@ -128,7 +128,7 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
 
       return await completer.future;
     } catch (e) {
-      _updateTask(taskId, subtitle: 'Error: $e', progress: 0.0);
+      updateTask(taskId, subtitle: 'Error: $e', progress: 0.0);
       throw Exception('Installation failed: $e');
     } finally {
       Future.delayed(const Duration(seconds: 2), () {
@@ -165,7 +165,7 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
         mod: mod,
         version: version,
         onProgress: (subtitle, progress) {
-          _updateTask(taskId, subtitle: subtitle, progress: progress);
+          updateTask(taskId, subtitle: subtitle, progress: progress);
         },
         cancelToken: cancelToken,
         updateInstance: updateInstance,
@@ -189,7 +189,7 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
       await startDownload(newInstance);
 
     } catch (e) {
-      _updateTask(taskId, subtitle: 'Error: ' + e.toString(), progress: 0.0);
+      updateTask(taskId, subtitle: 'Error: ' + e.toString(), progress: 0.0);
       Future.delayed(const Duration(seconds: 5), () {
         if (mounted) removeTask(taskId);
       });
@@ -220,7 +220,7 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
       final newInstance = await installer.extractAndInstallLocal(
         mrpackFile: mrpackFile,
         onProgress: (subtitle, progress) {
-          _updateTask(taskId, subtitle: subtitle, progress: progress);
+          updateTask(taskId, subtitle: subtitle, progress: progress);
         },
         cancelToken: cancelToken,
       );
@@ -240,20 +240,26 @@ class DownloadsNotifier extends StateNotifier<List<DownloadTaskInfo>> {
       await startDownload(newInstance);
 
     } catch (e) {
-      _updateTask(taskId, subtitle: 'Error: ' + e.toString(), progress: 0.0);
+      updateTask(taskId, subtitle: 'Error: ' + e.toString(), progress: 0.0);
       Future.delayed(const Duration(seconds: 5), () {
         if (mounted) removeTask(taskId);
       });
     }
   }
 
-  void _updateTask(String id, {String? subtitle, double? progress}) {
+  void updateTask(String id, {String? title, String? subtitle, double? progress}) {
     state = state.map((task) {
       if (task.instanceId == id) {
-        return task.copyWith(subtitle: subtitle, progress: progress);
+        return task.copyWith(title: title, subtitle: subtitle, progress: progress);
       }
       return task;
     }).toList();
+  }
+
+  void addTask(DownloadTaskInfo task) {
+    if (!state.any((t) => t.instanceId == task.instanceId)) {
+      state = [...state, task];
+    }
   }
 
   DartLoaderSpec _mapLoader(Instance instance) {

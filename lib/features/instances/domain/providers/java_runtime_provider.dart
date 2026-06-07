@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import '../../data/instance_repository.dart';
+import '../../../downloads/domain/providers/downloads_provider.dart';
 
 final javaRuntimeProvider = Provider<JavaRuntimeService>((ref) {
   return JavaRuntimeService(ref);
@@ -42,6 +43,16 @@ class JavaRuntimeService {
     final archiveExt = Platform.isWindows ? '.zip' : '.tar.gz';
     final archiveFile = File(p.join(runtimeDir.parent.path, 'download$archiveExt'));
 
+    // Hook into global download bar
+    final downloadsNotifier = ref.read(downloadsProvider.notifier);
+    final taskId = 'java_dl_$majorJavaVersion';
+    downloadsNotifier.addTask(DownloadTaskInfo(
+      instanceId: taskId,
+      title: 'Java Runtime Environment $majorJavaVersion',
+      subtitle: 'Connecting to Adoptium...',
+      progress: 0.0,
+    ));
+
     try {
       final dio = Dio();
       // 1. Download
@@ -49,9 +60,18 @@ class JavaRuntimeService {
         apiUrl,
         archiveFile.path,
         options: Options(followRedirects: true),
+        onReceiveProgress: (count, total) {
+          if (total > 0) {
+            downloadsNotifier.updateTask(taskId, 
+              subtitle: 'Downloading...', 
+              progress: count / total,
+            );
+          }
+        },
       );
 
       // 2. Extract natively
+      downloadsNotifier.updateTask(taskId, subtitle: 'Extracting natively...', progress: 1.0);
       final result = await Process.run('tar', ['-xf', archiveFile.path, '-C', runtimeDir.path]);
       if (result.exitCode != 0) {
         throw Exception('Failed to extract Java: ${result.stderr}');
@@ -62,10 +82,14 @@ class JavaRuntimeService {
         await archiveFile.delete();
       }
 
+      downloadsNotifier.removeTask(taskId);
+
       // 4. Find the extracted executable
       return await _findJavaExecutable(runtimeDir);
 
     } catch (e) {
+      downloadsNotifier.updateTask(taskId, subtitle: 'Error: $e', progress: 0.0);
+      Future.delayed(const Duration(seconds: 3), () => downloadsNotifier.removeTask(taskId));
       // Clean up the broken directory if it failed
       if (await runtimeDir.exists()) {
         await runtimeDir.delete(recursive: true);
