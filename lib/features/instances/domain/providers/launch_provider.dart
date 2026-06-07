@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../src/rust/api/launcher.dart';
+import '../../../../src/rust/api/installer.dart';
 import '../../../auth/presentation/auth_provider.dart';
 import '../../../settings/domain/providers/settings_provider.dart';
 import '../../data/instance_repository.dart';
@@ -29,7 +30,7 @@ class LaunchService {
     
     // Auto-download Java if the user hasn't explicitly set a custom path!
     if (javaExe == null || javaExe.trim().isEmpty) {
-      final targetVersion = instance.profileId ?? instance.minecraftVersion;
+      final targetVersion = instance.minecraftVersion;
       final root = await repo.getLauncherRoot();
       javaExe = await getJavaExecutablePath(minecraftDir: root, versionId: targetVersion);
       

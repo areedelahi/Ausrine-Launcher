@@ -104,7 +104,7 @@ pub fn install_instance(
         path: "".to_string(),
     });
 
-    if let Some(jvm_info) = mc_launcher_core::runtime::get_version_runtime_information(&install_result.version_id, &minecraft_dir) {
+    if let Some(jvm_info) = mc_launcher_core::runtime::get_version_runtime_information(&version, &minecraft_dir) {
         let jvm_version = jvm_info.name; // e.g. "java-runtime-gamma"
         let _ = progress_sink.add(DartProgressEvent::TaskStarted {
             label: format!("Installing {}", jvm_version),

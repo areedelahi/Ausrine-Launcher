@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+MeridixLauncher-macOS.dmg
+test.txt
+test.zip
+test_dir/
