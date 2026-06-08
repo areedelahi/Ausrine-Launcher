@@ -214,6 +214,12 @@ class MsAuthService {
   Future<String> _getCodeFromWebView(String url) async {
     final completer = Completer<String>();
 
+    try {
+      await WebviewWindow.clearAll();
+    } catch (e) {
+      debugPrint('Failed to clear Webview cache/cookies: $e');
+    }
+
     final webview = await WebviewWindow.create(
       configuration: const CreateConfiguration(
         windowHeight: 700,
