@@ -27,12 +27,9 @@ jobs:
         with:
           targets: x86_64-pc-windows-msvc
 
-      # Caches the Rust build artifacts to significantly speed up future workflow runs
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
         with:
-          # This tells the cache where your Rust workspace is located.
-          # If your Cargo.toml is in a different folder, adjust 'rust' to match your directory name.
           workspaces: rust -> target
 
       - name: Install dependencies
@@ -48,17 +45,22 @@ jobs:
         run: flutter build windows --release
 
       - name: Create MSIX Package
-        run: dart run msix:create
+        run: dart run msix:create --build-windows false --install-certificate false --output-name meridix-launcher
 
-      - name: Find and upload MSIX artifact
+      - name: Find generated MSIX
+        run: |
+          echo "=== Searching for .msix files ==="
+          Get-ChildItem -Path . -Filter "*.msix" -Recurse | Select-Object FullName, Length
+
+      - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: meridix-launcher-windows-msix
-          path: build/windows/x64/runner/Release/*.msix
+          path: "**/*.msix"
           retention-days: 30
-          if-no-files-found: warn
+          if-no-files-found: error
 
-      - name: Upload Windows app artifact
+      - name: Upload Windows portable artifact
         uses: actions/upload-artifact@v4
         with:
           name: meridix-launcher-windows-portable
@@ -80,7 +82,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**/Meridix-Launcher.msix
+            artifacts/**/meridix-launcher.msix
             artifacts/**/Release/**
           draft: false
           prerelease: false
