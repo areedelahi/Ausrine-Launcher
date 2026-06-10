@@ -42,7 +42,7 @@ jobs:
           cd ..
 
       - name: Build macOS app
-        run: flutter build macos --release --target-arch=arm64
+        run: flutter build macos --release
 
       - name: Create DMG
         run: |
