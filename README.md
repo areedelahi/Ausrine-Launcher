@@ -93,3 +93,7 @@ When you first launch the app:
   - Windows: `%APPDATA%\Meridix Launcher`
   - Linux: `~/.meridix` (not final)
 - You can change this in Settings under "Custom Data Folder"
+
+<div>&nbsp;<hr></div>
+
+<div><p><strong><span style="color:#169179">If you want to support me and donate a small amount, please consider this one time patreon donation (no subscription or membership)</span><br><span style="color:#169179"><a style="color:#169179" href="https://www.patreon.com/cw/AreedElahi" target="_blank" rel="nofollow">Join My Patreon</a></span></strong></p><p><strong>Join the discord for help and chat:</strong></p><p><a href="https://discord.gg/HVuWXt7BMJ" target="_blank" rel="nofollow">Areed's Discord Server</a></p></div>
