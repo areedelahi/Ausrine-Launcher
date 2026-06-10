@@ -27,6 +27,11 @@ jobs:
         with:
           targets: aarch64-apple-darwin
 
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust -> target
+
       - name: Install dependencies
         run: flutter pub get
 
