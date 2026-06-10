@@ -47,38 +47,18 @@ jobs:
       - name: Build Windows app
         run: flutter build windows --release
 
-      - name: Workaround for MSIX build path
-        shell: bash
-        run: |
-          mkdir -p build/windows/runner
-          cp -r build/windows/x64/runner/Release build/windows/runner/Release
-
-      - name: Create and Sign MSIX Package
-        shell: pwsh
+      - name: Create MSIX Package
         run: |
           flutter pub add --dev msix
-          dart run msix:create --build-windows false
-        continue-on-error: true
+          dart run msix:create
 
-      - name: Fallback - Manual MSIX packaging
-        if: failure()
-        shell: pwsh
-        run: |
-          # If msix:create fails, manually package using makeappx
-          $sdkPath = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\makeappx.exe" -ErrorAction SilentlyContinue | Sort-Object FullName -Descending | Select-Object -First 1
-          if ($sdkPath) {
-            Write-Host "Found makeappx at: $($sdkPath.FullName)"
-            & $sdkPath.FullName pack /d "build\windows\x64\runner\Release" /p "Meridix-Launcher.msix" /o
-          } else {
-            Write-Host "makeappx.exe not found, skipping manual packaging"
-          }
-
-      - name: Upload Windows MSIX artifact
+      - name: Find and upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: meridix-launcher-windows-msix
-          path: Meridix-Launcher.msix
+          path: build/windows/x64/runner/Release/*.msix
           retention-days: 30
+          if-no-files-found: warn
 
       - name: Upload Windows app artifact
         uses: actions/upload-artifact@v4
