@@ -44,36 +44,21 @@ jobs:
       - name: Build Windows app
         run: flutter build windows --release
 
-      - name: Install MSIX tools
+      - name: Create and Sign MSIX Package
+        # Adds the Dart MSIX package and generates the Meridix-Launcher.msix file. 
+        # Providing the certificate arguments here allows the Dart package to sign it automatically.
         run: |
-          # Download MsixHeroUI or use msix package
-          pip install msix
-
-      - name: Create MSIX package
-        run: |
-          msix create \
-              --manifest windows/msix/AppxManifest.xml \
-              --input build\\windows\\x64\\runner\\Release \
-              --output Meridix-Launcher.msix \
-              --certificate-file ${{ secrets.WINDOWS_CERTIFICATE_PATH }} \
-              --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
+          flutter pub add --dev msix
+          dart run msix:create --output-path . --output-name Meridix-Launcher --certificate-path "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
         continue-on-error: true
 
-      - name: Create MSIX (Alternative - using Flutter build)
-        if: failure()
-        run: |
-          # Alternative: use flutter build windows with msix configuration
-          flutter build windows --release --split-debug-info build/windows/debug_info
-
-      - name: Sign MSIX
+      - name: Sign MSIX (Fallback Tool)
         continue-on-error: true
+        # In case the Dart package's internal signing fails, this acts as a direct fallback using native signtool.
         run: |
-          signtool sign /f "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" \
-              /p "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}" \
-              /fd SHA256 /tr http://timestamp.digicert.com \
-              Meridix-Launcher.msix
+          signtool sign /f "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" /p "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}" /fd SHA256 /tr http://timestamp.digicert.com Meridix-Launcher.msix
 
-      - name: Upload Windows artifact
+      - name: Upload Windows MSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: meridix-launcher-windows-msix
@@ -99,7 +84,7 @@ jobs:
           path: artifacts/
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             artifacts/**/Meridix-Launcher.msix
