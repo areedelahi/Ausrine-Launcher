@@ -1,177 +1,66 @@
-name: Release Build & Publish
+name: Create Release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  # Allows you to trigger this workflow manually from the GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+        type: string
+      release_name:
+        description: 'Release title'
+        required: true
+        type: string
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          cache: true
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-apple-darwin
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build macOS app
-        run: flutter build macos --release --target-arch=arm64
-
-      - name: Create DMG
-        run: |
-          mkdir -p build/macos/dmg
-          cp -r build/macos/Build/Products/Release/liquid_launcher.app build/macos/dmg/
-          
-          hdiutil create -volname "Meridix Launcher" \
-            -srcfolder build/macos/dmg \
-            -ov \
-            -format UDZO \
-            "Meridix-Launcher-arm64.dmg"
-
-      - name: Upload DMG artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-arm64
-          path: "Meridix-Launcher-arm64.dmg"
-          retention-days: 7
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          cache: true
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-pc-windows-msvc
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Windows app
-        run: flutter build windows --release
-
-      - name: Package Windows app
-        run: |
-          # Create a zip of the portable app
-          Compress-Archive -Path build\windows\x64\runner\Release -DestinationPath Meridix-Launcher-Windows.zip
-
-      - name: Upload Windows artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-portable
-          path: Meridix-Launcher-Windows.zip
-          retention-days: 7
-
-  build-linux:
+  build-and-release:
     runs-on: ubuntu-latest
+    
+    # Required permission to create a release in the repository
+    permissions:
+      contents: write 
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      # 1. Download Windows Artifacts
+      - name: Download Windows Artifacts
+        uses: dawidd6/action-download-artifact@v3
         with:
-          flutter-version: 'stable'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: build-windows.yml
+          # Replace this with the exact name you used in the upload-artifact step of your Windows workflow
+          name: windows-build-files 
+          path: release-assets/windows
+          # Ensure it pulls from the same branch you are triggering the release from
+          branch: ${{ github.ref_name }} 
+          search_artifacts: true
 
-      - name: Install Linux dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev clang
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Linux app
-        run: flutter build linux --release
-
-      - name: Create AppImage
-        run: |
-          sudo apt-get install -y appimage-builder
-          # Package as AppImage or tar.gz
-          cd build/linux/x64/release/bundle
-          tar -czf ../../../../../Meridix-Launcher-Linux.tar.gz .
-          cd ../../../../../
-
-      - name: Upload Linux artifact
-        uses: actions/upload-artifact@v4
+      # 2. Download Macros Artifacts
+      - name: Download Macros Artifacts
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: linux-portable
-          path: Meridix-Launcher-Linux.tar.gz
-          retention-days: 7
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: build-macros.yml
+          # Replace this with the exact name you used in the upload-artifact step of your Macros workflow
+          name: macros-build-files 
+          path: release-assets/macros
+          branch: ${{ github.ref_name }}
+          search_artifacts: true
 
-  release:
-    needs: [build-macos, build-windows, build-linux]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
+      # 3. Create the GitHub Release and Upload Assets
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          path: release-files/
-
-      - name: Prepare release files
-        run: |
-          mkdir -p final-release
-          cp release-files/macos-*/* final-release/ 2>/dev/null || true
-          cp release-files/windows-*/* final-release/ 2>/dev/null || true
-          cp release-files/linux-*/* final-release/ 2>/dev/null || true
-          ls -la final-release/
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: final-release/*
+          tag_name: ${{ inputs.version_tag }}
+          name: ${{ inputs.release_name }}
+          # The download actions automatically unzip artifacts into the specified paths.
+          # This will grab all contents inside those directories and attach them to the release.
+          files: |
+            release-assets/windows/*
+            release-assets/macros/*
           draft: false
           prerelease: false
-          body: |
-            # Meridix Launcher ${{ github.ref_name }}
-            
-            Download the appropriate version for your platform:
-            - **macOS**: Meridix-Launcher-arm64.dmg (Apple Silicon)
-            - **Windows**: Meridix-Launcher-Windows.zip
-            - **Linux**: Meridix-Launcher-Linux.tar.gz
-            
-            ## Installation Instructions
-            
-            ### macOS
-            1. Download the DMG file
-            2. Open the DMG file
-            3. Drag "Meridix Launcher" to Applications folder
-            
-            ### Windows
-            1. Download the ZIP file
-            2. Extract to desired location
-            3. Run `Meridix Launcher.exe`
-            
-            ### Linux
-            1. Download the tar.gz file
-            2. Extract: `tar -xzf Meridix-Launcher-Linux.tar.gz`
-            3. Run: `./Meridix Launcher`
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
