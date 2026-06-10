@@ -44,21 +44,28 @@ jobs:
       - name: Build macOS app
         run: flutter build macos --release
 
+      - name: Install create-dmg
+        run: brew install create-dmg
+
       - name: Create DMG
         run: |
-          mkdir -p build/macos/dmg
+          mkdir -p build/macos/dmg_staging
           mkdir -p build/macos/Release
 
-          # Debug: show what was actually built
-          ls build/macos/Build/Products/Release/
+          # Copy the app to the staging directory
+          cp -r "build/macos/Build/Products/Release/Meridix Launcher.app" build/macos/dmg_staging/
 
-          cp -r "build/macos/Build/Products/Release/Meridix Launcher.app" build/macos/dmg/
-
-          hdiutil create -volname "Meridix Launcher" \
-            -srcfolder build/macos/dmg \
-            -ov \
-            -format UDZO \
-            build/macos/Release/Meridix-Launcher.dmg
+          # Generate the styled DMG
+          create-dmg \
+            --volname "Meridix Launcher" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 130 \
+            --icon "Meridix Launcher.app" 150 190 \
+            --hide-extension "Meridix Launcher.app" \
+            --app-drop-link 450 190 \
+            build/macos/Release/Meridix-Launcher.dmg \
+            build/macos/dmg_staging/
 
       - name: Sign DMG
         continue-on-error: true
@@ -95,7 +102,8 @@ jobs:
           path: artifacts/
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        # Bumped to v2 to avoid Node 16 deprecation warnings on GitHub Actions
+        uses: softprops/action-gh-release@v2 
         with:
           files: artifacts/**/Meridix-Launcher.dmg
           draft: false
