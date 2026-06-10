@@ -39,9 +39,16 @@ jobs:
           Get-ChildItem -Path "build\windows\x64\runner\Release" -Filter "*.exe" | Select-Object FullName
 
       - name: Create MSIX Package
-        run: dart run msix:create
+        run: dart run msix:create --build-windows false --install-certificate false
 
       - name: Find generated MSIX
         run: |
           echo "=== Searching for .msix files ==="
           Get-ChildItem -Path . -Filter "*.msix" -Recurse | Select-Object FullName, Length
+
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: meridix-launcher-msix
+          path: "**/*.msix"
+          if-no-files-found: error
