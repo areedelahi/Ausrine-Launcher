@@ -87,3 +87,4 @@ msix_config:
   output_path: "."
   output_name: "Meridix-Launcher"
   publisher: "CN=areedelahi"
+  build_windows: false

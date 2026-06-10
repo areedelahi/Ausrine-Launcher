@@ -54,15 +54,24 @@ jobs:
           cp -r build/windows/x64/runner/Release build/windows/runner/Release
 
       - name: Create and Sign MSIX Package
-        shell: bash
+        shell: pwsh
         run: |
           flutter pub add --dev msix
-          if [ -n "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" ]; then
-            dart run msix:create --certificate-path "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
-          else
-            dart run msix:create
-          fi
+          dart run msix:create --build-windows false
         continue-on-error: true
+
+      - name: Fallback - Manual MSIX packaging
+        if: failure()
+        shell: pwsh
+        run: |
+          # If msix:create fails, manually package using makeappx
+          $sdkPath = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\makeappx.exe" -ErrorAction SilentlyContinue | Sort-Object FullName -Descending | Select-Object -First 1
+          if ($sdkPath) {
+            Write-Host "Found makeappx at: $($sdkPath.FullName)"
+            & $sdkPath.FullName pack /d "build\windows\x64\runner\Release" /p "Meridix-Launcher.msix" /o
+          } else {
+            Write-Host "makeappx.exe not found, skipping manual packaging"
+          }
 
       - name: Upload Windows MSIX artifact
         uses: actions/upload-artifact@v4
