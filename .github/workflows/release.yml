@@ -1,7 +1,6 @@
 name: Create Release
 
 on:
-  # Allows you to trigger this workflow manually from the GitHub Actions tab
   workflow_dispatch:
     inputs:
       version_tag:
@@ -16,51 +15,47 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    
-    # Required permission to create a release in the repository
     permissions:
-      contents: write 
+      contents: write
+      actions: read
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 1. Download Windows Artifacts
       - name: Download Windows Artifacts
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: build-windows.yml
-          # Replace this with the exact name you used in the upload-artifact step of your Windows workflow
-          name: windows-build-files 
+          name: meridix-launcher-windows-msix
           path: release-assets/windows
-          # Ensure it pulls from the same branch you are triggering the release from
-          branch: ${{ github.ref_name }} 
-          search_artifacts: true
 
-      # 2. Download Macros Artifacts
-      - name: Download Macros Artifacts
-        uses: dawidd6/action-download-artifact@v3
+      - name: Download macOS Artifacts
+        uses: dawidd6/action-download-artifact@v6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: build-macros.yml
-          # Replace this with the exact name you used in the upload-artifact step of your Macros workflow
-          name: macros-build-files 
-          path: release-assets/macros
-          branch: ${{ github.ref_name }}
-          search_artifacts: true
+          name: meridix-launcher-macos-arm64
+          path: release-assets/macos
 
-      # 3. Create the GitHub Release and Upload Assets
+      - name: List downloaded assets
+        run: |
+          echo "=== Windows ==="
+          ls -la release-assets/windows/
+          echo "=== macOS ==="
+          ls -la release-assets/macos/
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.version_tag }}
           name: ${{ inputs.release_name }}
-          # The download actions automatically unzip artifacts into the specified paths.
-          # This will grab all contents inside those directories and attach them to the release.
           files: |
             release-assets/windows/*
-            release-assets/macros/*
+            release-assets/macos/*
           draft: false
           prerelease: false
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
