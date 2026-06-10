@@ -50,7 +50,7 @@ jobs:
       - name: Create and Sign MSIX Package
         run: |
           flutter pub add --dev msix
-          dart run msix:create --output-path . --output-name Meridix-Launcher --executable-name "liquid_launcher.exe" --certificate-path "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
+          dart run msix:create --output-path . --output-name Meridix-Launcher --executable-name "meridix_launcher.exe" --certificate-path "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
         continue-on-error: true
 
       - name: Upload Windows MSIX artifact
