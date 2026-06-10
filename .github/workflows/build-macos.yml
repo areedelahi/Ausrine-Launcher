@@ -43,7 +43,7 @@ jobs:
         run: |
           # Create DMG using appdmg or native tools
           mkdir -p build/macos/dmg
-          cp -r build/macos/Build/Products/Release/liquid_launcher.app build/macos/dmg/
+          cp -r "build/macos/Build/Products/Release/Meridix Launcher.app" build/macos/dmg/
           
           # Create DMG with proper layout
           hdiutil create -volname "Meridix Launcher" \

@@ -46,12 +46,12 @@ jobs:
 
       - name: Create MSIX package
         run: |
-          msix create `
-            --manifest windows/msix/AppxManifest.xml `
-            --input build\windows\x64\runner\Release `
-            --output Meridix-Launcher.msix `
-            --certificate-file ${{ secrets.WINDOWS_CERTIFICATE_PATH }} `
-            --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
+          msix create \
+              --manifest windows/msix/AppxManifest.xml \
+              --input build\\windows\\x64\\runner\\Release \
+              --output Meridix-Launcher.msix \
+              --certificate-file ${{ secrets.WINDOWS_CERTIFICATE_PATH }} \
+              --certificate-password "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}"
         continue-on-error: true
 
       - name: Create MSIX (Alternative - using Flutter build)
@@ -64,10 +64,10 @@ jobs:
         if: secrets.WINDOWS_CERTIFICATE_PATH != null
         run: |
           # Sign the MSIX package
-          signtool sign /f "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" `
-            /p "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}" `
-            /fd SHA256 /tr http://timestamp.digicert.com `
-            Meridix-Launcher.msix
+          signtool sign /f "${{ secrets.WINDOWS_CERTIFICATE_PATH }}" \
+              /p "${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}" \
+              /fd SHA256 /tr http://timestamp.digicert.com \
+              Meridix-Launcher.msix
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
