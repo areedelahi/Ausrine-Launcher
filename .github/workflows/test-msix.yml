@@ -39,9 +39,7 @@ jobs:
           Get-ChildItem -Path "build\windows\x64\runner\Release" -Filter "*.exe" | Select-Object FullName
 
       - name: Create MSIX Package
-        run: |
-          flutter pub add --dev msix
-          dart run msix:create
+        run: dart run msix:create
 
       - name: Find generated MSIX
         run: |

@@ -48,9 +48,7 @@ jobs:
         run: flutter build windows --release
 
       - name: Create MSIX Package
-        run: |
-          flutter pub add --dev msix
-          dart run msix:create
+        run: dart run msix:create
 
       - name: Find and upload MSIX artifact
         uses: actions/upload-artifact@v4
