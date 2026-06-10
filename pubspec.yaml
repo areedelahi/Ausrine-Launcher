@@ -79,10 +79,11 @@ flutter:
     - assets/images/
 
 msix_config:
-  display_name: Meridix Launcher
-  publisher_display_name: Meridix
-  identity_name: MeridixLauncher
-  msix_version: 1.0.0.0
-  executable_file_name: meridix_launcher.exe
-  output_path: .
-  output_name: Meridix-Launcher
+  display_name: "Meridix Launcher"
+  publisher_display_name: "areedelahi"
+  identity_name: "MeridixLauncher"
+  msix_version: "1.0.0.0"
+  executable_file_name: "meridix_launcher.exe"
+  output_path: "."
+  output_name: "Meridix-Launcher"
+  publisher: "CN=areedelahi"
