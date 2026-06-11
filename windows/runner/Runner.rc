@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "app.liquidlauncher" "\0"
-            VALUE "FileDescription", "Meridix Launcher" "\0"
+            VALUE "FileDescription", "Ausrinė Launcher" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "liquid_launcher" "\0"
+            VALUE "InternalName", "ausrine_launcher" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 app.liquidlauncher. All rights reserved." "\0"
-            VALUE "OriginalFilename", "liquid_launcher.exe" "\0"
-            VALUE "ProductName", "Meridix Launcher" "\0"
+            VALUE "OriginalFilename", "ausrine_launcher.exe" "\0"
+            VALUE "ProductName", "Ausrinė Launcher" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

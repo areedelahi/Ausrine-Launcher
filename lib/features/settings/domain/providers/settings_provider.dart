@@ -85,7 +85,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
     await prefs.setBool('closeOnLaunch', newSettings.closeOnLaunch);
     state = newSettings;
     try {
-      final baseDir = await getMeridixSupportDirectory();
+      final baseDir = await getAusrineSupportDirectory();
       final logDir = Directory(p.join(baseDir.path, 'logs'));
       if (!await logDir.exists()) {
         await logDir.create(recursive: true);

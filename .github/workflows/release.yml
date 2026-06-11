@@ -28,7 +28,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: build-windows.yml
-          name: meridix-launcher-windows-msix
+          name: ausrine-launcher-windows-msix
           path: release-assets/windows
 
       - name: Download macOS Artifacts
@@ -36,7 +36,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: build-macos.yml
-          name: meridix-launcher-macos-arm64
+          name: ausrine-launcher-macos-arm64
           path: release-assets/macos
 
       - name: List downloaded assets

@@ -7,7 +7,7 @@ class CurseForgeApiProvider {
     headers: {
       'Accept': 'application/json',
       'x-api-key': '\$2a\$10\$bL4bIL5pUWqfcO7KQ0PhOwQ3cRxZE8DML2kR3h.sC6lZOhH2tFUSC',
-      'User-Agent': 'Meridix Launcher/1.0.0 (areedelahi@gmail.com)',
+      'User-Agent': 'Ausrinė Launcher/1.0.0 (areedelahi@gmail.com)',
     },
   ));
 

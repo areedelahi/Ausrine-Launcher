@@ -31,7 +31,7 @@ class DesktopWindowService implements WindowService {
   @override
   Future<void> initialize({
     Size minSize = const Size(960, 640),
-    String title = 'Meridix Launcher',
+    String title = 'Ausrinė Launcher',
   }) async {
     await windowManager.ensureInitialized();
     final options = WindowOptions(

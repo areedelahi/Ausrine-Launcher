@@ -40,7 +40,7 @@ class DesktopFileService implements FileService {
       return _launcherDirCache!;
     }
 
-    final appSupport = await getMeridixSupportDirectory();
+    final appSupport = await getAusrineSupportDirectory();
     _launcherDirCache = await ensure(appSupport);
     return _launcherDirCache!;
   }
@@ -72,7 +72,7 @@ class DesktopFileService implements FileService {
   @override
   Future<Directory> nativesDir(String instanceId) async {
     final temp = await getTemporaryDirectory();
-    return ensure(Directory(p.join(temp.path, 'liquid_natives', instanceId)));
+    return ensure(Directory(p.join(temp.path, 'ausrine_natives', instanceId)));
   }
 
   @override
@@ -113,32 +113,32 @@ class DesktopFileService implements FileService {
   }
 }
 
-Future<Directory> getMeridixSupportDirectory() async {
+Future<Directory> getAusrineSupportDirectory() async {
   if (Platform.isMacOS) {
     final home = Platform.environment['HOME'];
     if (home != null) {
-      final dir = Directory(p.join(home, 'Library', 'Application Support', 'Meridix Launcher'));
+      final dir = Directory(p.join(home, 'Library', 'Application Support', 'Ausrinė Launcher'));
       if (!dir.existsSync()) await dir.create(recursive: true);
       return dir;
     }
   } else if (Platform.isWindows) {
     final appData = Platform.environment['APPDATA'];
     if (appData != null) {
-      final dir = Directory(p.join(appData, 'Meridix Launcher'));
+      final dir = Directory(p.join(appData, 'Ausrinė Launcher'));
       if (!dir.existsSync()) await dir.create(recursive: true);
       return dir;
     }
   } else if (Platform.isLinux) {
     final home = Platform.environment['HOME'];
     if (home != null) {
-      final dir = Directory(p.join(home, '.config', 'Meridix Launcher'));
+      final dir = Directory(p.join(home, '.config', 'Ausrinė Launcher'));
       if (!dir.existsSync()) await dir.create(recursive: true);
       return dir;
     }
   }
 
   final base = await getApplicationSupportDirectory();
-  final dir = Directory(p.join(base.path, 'Meridix Launcher'));
+  final dir = Directory(p.join(base.path, 'Ausrinė Launcher'));
   if (!dir.existsSync()) await dir.create(recursive: true);
   return dir;
 }

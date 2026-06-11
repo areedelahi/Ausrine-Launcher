@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_launcher/src/rust/api/metadata.dart';
-import 'package:liquid_launcher/src/rust/frb_generated.dart';
+import 'package:ausrine_launcher/src/rust/api/metadata.dart';
+import 'package:ausrine_launcher/src/rust/frb_generated.dart';
 
 void main() {
   test('fetch forge versions', () async {

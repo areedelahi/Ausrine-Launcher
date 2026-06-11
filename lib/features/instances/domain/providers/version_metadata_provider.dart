@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:liquid_launcher/src/rust/api/metadata.dart';
+import 'package:ausrine_launcher/src/rust/api/metadata.dart';
 import 'package:dio/dio.dart';
 
 final vanillaVersionsProvider = FutureProvider<List<VanillaVersion>>((ref) async {

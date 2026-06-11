@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_launcher/main.dart';
-import 'package:liquid_launcher/src/rust/frb_generated.dart';
+import 'package:ausrine_launcher/main.dart';
+import 'package:ausrine_launcher/src/rust/frb_generated.dart';
 import 'package:integration_test/integration_test.dart';
 
 void main() {

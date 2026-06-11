@@ -1,4 +1,4 @@
-# Meridix Launcher
+# Ausrinė Launcher
 
 A fast, clean Minecraft launcher for Mac, Windows, and Linux.
 
@@ -8,7 +8,7 @@ A fast, clean Minecraft launcher for Mac, Windows, and Linux.
 
 1. Download the latest `.dmg` from the website
 2. Open the DMG file
-3. Drag "Meridix Launcher" to your Applications folder
+3. Drag "Ausrinė Launcher" to your Applications folder
 4. When You double click it to open it will show a popup saying its not checked if its safe (which it is, its open source, error appears because I have not paid the $99 fee of apple :] ), Open spotlight and search "Privacy and Security", click enter. Then scroll all the way down, You will see the app name, click the button "allow this app" and done, this is a one time thing.
 5. Done - launch from Applications
 
@@ -89,9 +89,9 @@ When you first launch the app:
 
 ## Data:
 - Data is stored in a hidden folder:
-  - macOS: `~/Library/Application Support/Meridix Launcher`
-  - Windows: `%APPDATA%\Meridix Launcher`
-  - Linux: `~/.meridix` (not final)
+  - macOS: `~/Library/Application Support/Ausrinė Launcher`
+  - Windows: `%APPDATA%\Ausrinė Launcher`
+  - Linux: `~/.ausrine` (not final)
 - You can change this in Settings under "Custom Data Folder"
 
 ## Technical Details

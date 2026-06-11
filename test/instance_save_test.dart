@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:liquid_launcher/features/instances/domain/models/instance.dart';
+import 'package:ausrine_launcher/features/instances/domain/models/instance.dart';
 
 void main() {
   test('Instance clearOverrides', () {

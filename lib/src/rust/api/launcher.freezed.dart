@@ -1,9 +1,18 @@
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'launcher.dart';
 
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+// dart format off
 T _$identity<T>(T value) => value;
 
+/// @nodoc
 mixin _$LaunchEvent {
   @override
   bool operator ==(Object other) {
@@ -20,11 +29,24 @@ mixin _$LaunchEvent {
   }
 }
 
+/// @nodoc
 class $LaunchEventCopyWith<$Res> {
   $LaunchEventCopyWith(LaunchEvent _, $Res Function(LaunchEvent) __);
 }
 
+/// Adds pattern-matching-related methods to [LaunchEvent].
 extension LaunchEventPatterns on LaunchEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -43,6 +65,19 @@ extension LaunchEventPatterns on LaunchEvent {
     }
   }
 
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(LaunchEvent_Started value) started,
@@ -56,6 +91,18 @@ extension LaunchEventPatterns on LaunchEvent {
         return exited(_that);
     }
   }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -72,6 +119,18 @@ extension LaunchEventPatterns on LaunchEvent {
         return null;
     }
   }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -90,6 +149,19 @@ extension LaunchEventPatterns on LaunchEvent {
     }
   }
 
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int pid) started,
@@ -103,6 +175,18 @@ extension LaunchEventPatterns on LaunchEvent {
         return exited(_that.code);
     }
   }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -121,11 +205,15 @@ extension LaunchEventPatterns on LaunchEvent {
   }
 }
 
+/// @nodoc
+
 class LaunchEvent_Started extends LaunchEvent {
   const LaunchEvent_Started({required this.pid}) : super._();
 
   final int pid;
 
+  /// Create a copy of LaunchEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $LaunchEvent_StartedCopyWith<LaunchEvent_Started> get copyWith =>
@@ -148,6 +236,7 @@ class LaunchEvent_Started extends LaunchEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $LaunchEvent_StartedCopyWith<$Res>
     implements $LaunchEventCopyWith<$Res> {
   factory $LaunchEvent_StartedCopyWith(
@@ -157,6 +246,7 @@ abstract mixin class $LaunchEvent_StartedCopyWith<$Res>
   $Res call({int pid});
 }
 
+/// @nodoc
 class _$LaunchEvent_StartedCopyWithImpl<$Res>
     implements $LaunchEvent_StartedCopyWith<$Res> {
   _$LaunchEvent_StartedCopyWithImpl(this._self, this._then);
@@ -164,6 +254,8 @@ class _$LaunchEvent_StartedCopyWithImpl<$Res>
   final LaunchEvent_Started _self;
   final $Res Function(LaunchEvent_Started) _then;
 
+  /// Create a copy of LaunchEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? pid = null,
@@ -171,17 +263,21 @@ class _$LaunchEvent_StartedCopyWithImpl<$Res>
     return _then(LaunchEvent_Started(
       pid: null == pid
           ? _self.pid
-          : pid 
+          : pid // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
 }
+
+/// @nodoc
 
 class LaunchEvent_Exited extends LaunchEvent {
   const LaunchEvent_Exited({required this.code}) : super._();
 
   final int code;
 
+  /// Create a copy of LaunchEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $LaunchEvent_ExitedCopyWith<LaunchEvent_Exited> get copyWith =>
@@ -204,6 +300,7 @@ class LaunchEvent_Exited extends LaunchEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $LaunchEvent_ExitedCopyWith<$Res>
     implements $LaunchEventCopyWith<$Res> {
   factory $LaunchEvent_ExitedCopyWith(
@@ -213,6 +310,7 @@ abstract mixin class $LaunchEvent_ExitedCopyWith<$Res>
   $Res call({int code});
 }
 
+/// @nodoc
 class _$LaunchEvent_ExitedCopyWithImpl<$Res>
     implements $LaunchEvent_ExitedCopyWith<$Res> {
   _$LaunchEvent_ExitedCopyWithImpl(this._self, this._then);
@@ -220,6 +318,8 @@ class _$LaunchEvent_ExitedCopyWithImpl<$Res>
   final LaunchEvent_Exited _self;
   final $Res Function(LaunchEvent_Exited) _then;
 
+  /// Create a copy of LaunchEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? code = null,
@@ -227,9 +327,10 @@ class _$LaunchEvent_ExitedCopyWithImpl<$Res>
     return _then(LaunchEvent_Exited(
       code: null == code
           ? _self.code
-          : code 
+          : code // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
 }
 
+// dart format on

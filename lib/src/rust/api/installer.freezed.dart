@@ -1,9 +1,18 @@
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'installer.dart';
 
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+// dart format off
 T _$identity<T>(T value) => value;
 
+/// @nodoc
 mixin _$DartLoaderSpec {
   @override
   bool operator ==(Object other) {
@@ -20,11 +29,24 @@ mixin _$DartLoaderSpec {
   }
 }
 
+/// @nodoc
 class $DartLoaderSpecCopyWith<$Res> {
   $DartLoaderSpecCopyWith(DartLoaderSpec _, $Res Function(DartLoaderSpec) __);
 }
 
+/// Adds pattern-matching-related methods to [DartLoaderSpec].
 extension DartLoaderSpecPatterns on DartLoaderSpec {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -52,6 +74,19 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
     }
   }
 
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(DartLoaderSpec_Vanilla value) vanilla,
@@ -74,6 +109,18 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
         return neoForge(_that);
     }
   }
+
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -99,6 +146,18 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
         return null;
     }
   }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -126,6 +185,19 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
     }
   }
 
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() vanilla,
@@ -148,6 +220,18 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
         return neoForge(_that.version);
     }
   }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -175,6 +259,8 @@ extension DartLoaderSpecPatterns on DartLoaderSpec {
   }
 }
 
+/// @nodoc
+
 class DartLoaderSpec_Vanilla extends DartLoaderSpec {
   const DartLoaderSpec_Vanilla() : super._();
 
@@ -193,11 +279,15 @@ class DartLoaderSpec_Vanilla extends DartLoaderSpec {
   }
 }
 
+/// @nodoc
+
 class DartLoaderSpec_Fabric extends DartLoaderSpec {
   const DartLoaderSpec_Fabric({required this.version}) : super._();
 
   final String version;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartLoaderSpec_FabricCopyWith<DartLoaderSpec_Fabric> get copyWith =>
@@ -221,6 +311,7 @@ class DartLoaderSpec_Fabric extends DartLoaderSpec {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartLoaderSpec_FabricCopyWith<$Res>
     implements $DartLoaderSpecCopyWith<$Res> {
   factory $DartLoaderSpec_FabricCopyWith(DartLoaderSpec_Fabric value,
@@ -230,6 +321,7 @@ abstract mixin class $DartLoaderSpec_FabricCopyWith<$Res>
   $Res call({String version});
 }
 
+/// @nodoc
 class _$DartLoaderSpec_FabricCopyWithImpl<$Res>
     implements $DartLoaderSpec_FabricCopyWith<$Res> {
   _$DartLoaderSpec_FabricCopyWithImpl(this._self, this._then);
@@ -237,6 +329,8 @@ class _$DartLoaderSpec_FabricCopyWithImpl<$Res>
   final DartLoaderSpec_Fabric _self;
   final $Res Function(DartLoaderSpec_Fabric) _then;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? version = null,
@@ -244,17 +338,21 @@ class _$DartLoaderSpec_FabricCopyWithImpl<$Res>
     return _then(DartLoaderSpec_Fabric(
       version: null == version
           ? _self.version
-          : version 
+          : version // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartLoaderSpec_Forge extends DartLoaderSpec {
   const DartLoaderSpec_Forge({required this.version}) : super._();
 
   final String version;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartLoaderSpec_ForgeCopyWith<DartLoaderSpec_Forge> get copyWith =>
@@ -278,6 +376,7 @@ class DartLoaderSpec_Forge extends DartLoaderSpec {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartLoaderSpec_ForgeCopyWith<$Res>
     implements $DartLoaderSpecCopyWith<$Res> {
   factory $DartLoaderSpec_ForgeCopyWith(DartLoaderSpec_Forge value,
@@ -287,6 +386,7 @@ abstract mixin class $DartLoaderSpec_ForgeCopyWith<$Res>
   $Res call({String version});
 }
 
+/// @nodoc
 class _$DartLoaderSpec_ForgeCopyWithImpl<$Res>
     implements $DartLoaderSpec_ForgeCopyWith<$Res> {
   _$DartLoaderSpec_ForgeCopyWithImpl(this._self, this._then);
@@ -294,6 +394,8 @@ class _$DartLoaderSpec_ForgeCopyWithImpl<$Res>
   final DartLoaderSpec_Forge _self;
   final $Res Function(DartLoaderSpec_Forge) _then;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? version = null,
@@ -301,17 +403,21 @@ class _$DartLoaderSpec_ForgeCopyWithImpl<$Res>
     return _then(DartLoaderSpec_Forge(
       version: null == version
           ? _self.version
-          : version 
+          : version // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartLoaderSpec_Quilt extends DartLoaderSpec {
   const DartLoaderSpec_Quilt({required this.version}) : super._();
 
   final String version;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartLoaderSpec_QuiltCopyWith<DartLoaderSpec_Quilt> get copyWith =>
@@ -335,6 +441,7 @@ class DartLoaderSpec_Quilt extends DartLoaderSpec {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartLoaderSpec_QuiltCopyWith<$Res>
     implements $DartLoaderSpecCopyWith<$Res> {
   factory $DartLoaderSpec_QuiltCopyWith(DartLoaderSpec_Quilt value,
@@ -344,6 +451,7 @@ abstract mixin class $DartLoaderSpec_QuiltCopyWith<$Res>
   $Res call({String version});
 }
 
+/// @nodoc
 class _$DartLoaderSpec_QuiltCopyWithImpl<$Res>
     implements $DartLoaderSpec_QuiltCopyWith<$Res> {
   _$DartLoaderSpec_QuiltCopyWithImpl(this._self, this._then);
@@ -351,6 +459,8 @@ class _$DartLoaderSpec_QuiltCopyWithImpl<$Res>
   final DartLoaderSpec_Quilt _self;
   final $Res Function(DartLoaderSpec_Quilt) _then;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? version = null,
@@ -358,17 +468,21 @@ class _$DartLoaderSpec_QuiltCopyWithImpl<$Res>
     return _then(DartLoaderSpec_Quilt(
       version: null == version
           ? _self.version
-          : version 
+          : version // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartLoaderSpec_NeoForge extends DartLoaderSpec {
   const DartLoaderSpec_NeoForge({required this.version}) : super._();
 
   final String version;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartLoaderSpec_NeoForgeCopyWith<DartLoaderSpec_NeoForge> get copyWith =>
@@ -392,6 +506,7 @@ class DartLoaderSpec_NeoForge extends DartLoaderSpec {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartLoaderSpec_NeoForgeCopyWith<$Res>
     implements $DartLoaderSpecCopyWith<$Res> {
   factory $DartLoaderSpec_NeoForgeCopyWith(DartLoaderSpec_NeoForge value,
@@ -401,6 +516,7 @@ abstract mixin class $DartLoaderSpec_NeoForgeCopyWith<$Res>
   $Res call({String version});
 }
 
+/// @nodoc
 class _$DartLoaderSpec_NeoForgeCopyWithImpl<$Res>
     implements $DartLoaderSpec_NeoForgeCopyWith<$Res> {
   _$DartLoaderSpec_NeoForgeCopyWithImpl(this._self, this._then);
@@ -408,6 +524,8 @@ class _$DartLoaderSpec_NeoForgeCopyWithImpl<$Res>
   final DartLoaderSpec_NeoForge _self;
   final $Res Function(DartLoaderSpec_NeoForge) _then;
 
+  /// Create a copy of DartLoaderSpec
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? version = null,
@@ -415,12 +533,13 @@ class _$DartLoaderSpec_NeoForgeCopyWithImpl<$Res>
     return _then(DartLoaderSpec_NeoForge(
       version: null == version
           ? _self.version
-          : version 
+          : version // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
+/// @nodoc
 mixin _$DartProgressEvent {
   @override
   bool operator ==(Object other) {
@@ -437,12 +556,25 @@ mixin _$DartProgressEvent {
   }
 }
 
+/// @nodoc
 class $DartProgressEventCopyWith<$Res> {
   $DartProgressEventCopyWith(
       DartProgressEvent _, $Res Function(DartProgressEvent) __);
 }
 
+/// Adds pattern-matching-related methods to [DartProgressEvent].
 extension DartProgressEventPatterns on DartProgressEvent {
+  /// A variant of `map` that fallback to returning `orElse`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -475,6 +607,19 @@ extension DartProgressEventPatterns on DartProgressEvent {
         return orElse();
     }
   }
+
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
@@ -510,6 +655,18 @@ extension DartProgressEventPatterns on DartProgressEvent {
     }
   }
 
+  /// A variant of `map` that fallback to returning `null`.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(DartProgressEvent_StageStarted value)? stageStarted,
@@ -540,6 +697,18 @@ extension DartProgressEventPatterns on DartProgressEvent {
         return null;
     }
   }
+
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -574,6 +743,19 @@ extension DartProgressEventPatterns on DartProgressEvent {
     }
   }
 
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// As opposed to `map`, this offers destructuring.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case Subclass2(:final field2):
+  ///     return ...;
+  /// }
+  /// ```
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String stage) stageStarted,
@@ -604,6 +786,18 @@ extension DartProgressEventPatterns on DartProgressEvent {
         return installComplete(_that.versionId);
     }
   }
+
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -638,11 +832,15 @@ extension DartProgressEventPatterns on DartProgressEvent {
   }
 }
 
+/// @nodoc
+
 class DartProgressEvent_StageStarted extends DartProgressEvent {
   const DartProgressEvent_StageStarted({required this.stage}) : super._();
 
   final String stage;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_StageStartedCopyWith<DartProgressEvent_StageStarted>
@@ -666,6 +864,7 @@ class DartProgressEvent_StageStarted extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_StageStartedCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_StageStartedCopyWith(
@@ -676,6 +875,7 @@ abstract mixin class $DartProgressEvent_StageStartedCopyWith<$Res>
   $Res call({String stage});
 }
 
+/// @nodoc
 class _$DartProgressEvent_StageStartedCopyWithImpl<$Res>
     implements $DartProgressEvent_StageStartedCopyWith<$Res> {
   _$DartProgressEvent_StageStartedCopyWithImpl(this._self, this._then);
@@ -683,6 +883,8 @@ class _$DartProgressEvent_StageStartedCopyWithImpl<$Res>
   final DartProgressEvent_StageStarted _self;
   final $Res Function(DartProgressEvent_StageStarted) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? stage = null,
@@ -690,11 +892,13 @@ class _$DartProgressEvent_StageStartedCopyWithImpl<$Res>
     return _then(DartProgressEvent_StageStarted(
       stage: null == stage
           ? _self.stage
-          : stage 
+          : stage // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_TaskStarted extends DartProgressEvent {
   const DartProgressEvent_TaskStarted({required this.label, required this.path})
@@ -703,6 +907,8 @@ class DartProgressEvent_TaskStarted extends DartProgressEvent {
   final String label;
   final String path;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_TaskStartedCopyWith<DartProgressEvent_TaskStarted>
@@ -727,6 +933,7 @@ class DartProgressEvent_TaskStarted extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_TaskStartedCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_TaskStartedCopyWith(
@@ -737,6 +944,7 @@ abstract mixin class $DartProgressEvent_TaskStartedCopyWith<$Res>
   $Res call({String label, String path});
 }
 
+/// @nodoc
 class _$DartProgressEvent_TaskStartedCopyWithImpl<$Res>
     implements $DartProgressEvent_TaskStartedCopyWith<$Res> {
   _$DartProgressEvent_TaskStartedCopyWithImpl(this._self, this._then);
@@ -744,6 +952,8 @@ class _$DartProgressEvent_TaskStartedCopyWithImpl<$Res>
   final DartProgressEvent_TaskStarted _self;
   final $Res Function(DartProgressEvent_TaskStarted) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? label = null,
@@ -752,15 +962,17 @@ class _$DartProgressEvent_TaskStartedCopyWithImpl<$Res>
     return _then(DartProgressEvent_TaskStarted(
       label: null == label
           ? _self.label
-          : label 
+          : label // ignore: cast_nullable_to_non_nullable
               as String,
       path: null == path
           ? _self.path
-          : path 
+          : path // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_TaskSkipped extends DartProgressEvent {
   const DartProgressEvent_TaskSkipped(
@@ -770,6 +982,8 @@ class DartProgressEvent_TaskSkipped extends DartProgressEvent {
   final String label;
   final String reason;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_TaskSkippedCopyWith<DartProgressEvent_TaskSkipped>
@@ -794,6 +1008,7 @@ class DartProgressEvent_TaskSkipped extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_TaskSkippedCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_TaskSkippedCopyWith(
@@ -804,6 +1019,7 @@ abstract mixin class $DartProgressEvent_TaskSkippedCopyWith<$Res>
   $Res call({String label, String reason});
 }
 
+/// @nodoc
 class _$DartProgressEvent_TaskSkippedCopyWithImpl<$Res>
     implements $DartProgressEvent_TaskSkippedCopyWith<$Res> {
   _$DartProgressEvent_TaskSkippedCopyWithImpl(this._self, this._then);
@@ -811,6 +1027,8 @@ class _$DartProgressEvent_TaskSkippedCopyWithImpl<$Res>
   final DartProgressEvent_TaskSkipped _self;
   final $Res Function(DartProgressEvent_TaskSkipped) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? label = null,
@@ -819,21 +1037,25 @@ class _$DartProgressEvent_TaskSkippedCopyWithImpl<$Res>
     return _then(DartProgressEvent_TaskSkipped(
       label: null == label
           ? _self.label
-          : label 
+          : label // ignore: cast_nullable_to_non_nullable
               as String,
       reason: null == reason
           ? _self.reason
-          : reason 
+          : reason // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_TaskFinished extends DartProgressEvent {
   const DartProgressEvent_TaskFinished({required this.label}) : super._();
 
   final String label;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_TaskFinishedCopyWith<DartProgressEvent_TaskFinished>
@@ -857,6 +1079,7 @@ class DartProgressEvent_TaskFinished extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_TaskFinishedCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_TaskFinishedCopyWith(
@@ -867,6 +1090,7 @@ abstract mixin class $DartProgressEvent_TaskFinishedCopyWith<$Res>
   $Res call({String label});
 }
 
+/// @nodoc
 class _$DartProgressEvent_TaskFinishedCopyWithImpl<$Res>
     implements $DartProgressEvent_TaskFinishedCopyWith<$Res> {
   _$DartProgressEvent_TaskFinishedCopyWithImpl(this._self, this._then);
@@ -874,6 +1098,8 @@ class _$DartProgressEvent_TaskFinishedCopyWithImpl<$Res>
   final DartProgressEvent_TaskFinished _self;
   final $Res Function(DartProgressEvent_TaskFinished) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? label = null,
@@ -881,11 +1107,13 @@ class _$DartProgressEvent_TaskFinishedCopyWithImpl<$Res>
     return _then(DartProgressEvent_TaskFinished(
       label: null == label
           ? _self.label
-          : label 
+          : label // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_BytesReceived extends DartProgressEvent {
   const DartProgressEvent_BytesReceived(
@@ -896,6 +1124,8 @@ class DartProgressEvent_BytesReceived extends DartProgressEvent {
   final BigInt received;
   final BigInt? total;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_BytesReceivedCopyWith<DartProgressEvent_BytesReceived>
@@ -922,6 +1152,7 @@ class DartProgressEvent_BytesReceived extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_BytesReceivedCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_BytesReceivedCopyWith(
@@ -932,6 +1163,7 @@ abstract mixin class $DartProgressEvent_BytesReceivedCopyWith<$Res>
   $Res call({String label, BigInt received, BigInt? total});
 }
 
+/// @nodoc
 class _$DartProgressEvent_BytesReceivedCopyWithImpl<$Res>
     implements $DartProgressEvent_BytesReceivedCopyWith<$Res> {
   _$DartProgressEvent_BytesReceivedCopyWithImpl(this._self, this._then);
@@ -939,6 +1171,8 @@ class _$DartProgressEvent_BytesReceivedCopyWithImpl<$Res>
   final DartProgressEvent_BytesReceived _self;
   final $Res Function(DartProgressEvent_BytesReceived) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? label = null,
@@ -948,19 +1182,21 @@ class _$DartProgressEvent_BytesReceivedCopyWithImpl<$Res>
     return _then(DartProgressEvent_BytesReceived(
       label: null == label
           ? _self.label
-          : label 
+          : label // ignore: cast_nullable_to_non_nullable
               as String,
       received: null == received
           ? _self.received
-          : received 
+          : received // ignore: cast_nullable_to_non_nullable
               as BigInt,
       total: freezed == total
           ? _self.total
-          : total 
+          : total // ignore: cast_nullable_to_non_nullable
               as BigInt?,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_PlanProgress extends DartProgressEvent {
   const DartProgressEvent_PlanProgress(
@@ -970,6 +1206,8 @@ class DartProgressEvent_PlanProgress extends DartProgressEvent {
   final BigInt completedBytes;
   final BigInt totalBytes;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_PlanProgressCopyWith<DartProgressEvent_PlanProgress>
@@ -996,6 +1234,7 @@ class DartProgressEvent_PlanProgress extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_PlanProgressCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_PlanProgressCopyWith(
@@ -1006,6 +1245,7 @@ abstract mixin class $DartProgressEvent_PlanProgressCopyWith<$Res>
   $Res call({BigInt completedBytes, BigInt totalBytes});
 }
 
+/// @nodoc
 class _$DartProgressEvent_PlanProgressCopyWithImpl<$Res>
     implements $DartProgressEvent_PlanProgressCopyWith<$Res> {
   _$DartProgressEvent_PlanProgressCopyWithImpl(this._self, this._then);
@@ -1013,6 +1253,8 @@ class _$DartProgressEvent_PlanProgressCopyWithImpl<$Res>
   final DartProgressEvent_PlanProgress _self;
   final $Res Function(DartProgressEvent_PlanProgress) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? completedBytes = null,
@@ -1021,15 +1263,17 @@ class _$DartProgressEvent_PlanProgressCopyWithImpl<$Res>
     return _then(DartProgressEvent_PlanProgress(
       completedBytes: null == completedBytes
           ? _self.completedBytes
-          : completedBytes 
+          : completedBytes // ignore: cast_nullable_to_non_nullable
               as BigInt,
       totalBytes: null == totalBytes
           ? _self.totalBytes
-          : totalBytes 
+          : totalBytes // ignore: cast_nullable_to_non_nullable
               as BigInt,
     ));
   }
 }
+
+/// @nodoc
 
 class DartProgressEvent_InstallComplete extends DartProgressEvent {
   const DartProgressEvent_InstallComplete({required this.versionId})
@@ -1037,6 +1281,8 @@ class DartProgressEvent_InstallComplete extends DartProgressEvent {
 
   final String versionId;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
   $DartProgressEvent_InstallCompleteCopyWith<DartProgressEvent_InstallComplete>
@@ -1061,6 +1307,7 @@ class DartProgressEvent_InstallComplete extends DartProgressEvent {
   }
 }
 
+/// @nodoc
 abstract mixin class $DartProgressEvent_InstallCompleteCopyWith<$Res>
     implements $DartProgressEventCopyWith<$Res> {
   factory $DartProgressEvent_InstallCompleteCopyWith(
@@ -1071,6 +1318,7 @@ abstract mixin class $DartProgressEvent_InstallCompleteCopyWith<$Res>
   $Res call({String versionId});
 }
 
+/// @nodoc
 class _$DartProgressEvent_InstallCompleteCopyWithImpl<$Res>
     implements $DartProgressEvent_InstallCompleteCopyWith<$Res> {
   _$DartProgressEvent_InstallCompleteCopyWithImpl(this._self, this._then);
@@ -1078,6 +1326,8 @@ class _$DartProgressEvent_InstallCompleteCopyWithImpl<$Res>
   final DartProgressEvent_InstallComplete _self;
   final $Res Function(DartProgressEvent_InstallComplete) _then;
 
+  /// Create a copy of DartProgressEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   $Res call({
     Object? versionId = null,
@@ -1085,9 +1335,10 @@ class _$DartProgressEvent_InstallCompleteCopyWithImpl<$Res>
     return _then(DartProgressEvent_InstallComplete(
       versionId: null == versionId
           ? _self.versionId
-          : versionId 
+          : versionId // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
+// dart format on

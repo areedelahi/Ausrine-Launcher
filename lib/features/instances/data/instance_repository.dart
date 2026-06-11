@@ -20,7 +20,7 @@ class InstanceRepository {
     if (customDir != null && customDir.isNotEmpty) {
       baseDir = Directory(customDir);
     } else {
-      baseDir = await getMeridixSupportDirectory();
+      baseDir = await getAusrineSupportDirectory();
     }
 
     final dir = Directory(p.join(baseDir.path, 'instances'));

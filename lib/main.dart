@@ -43,7 +43,7 @@ Future<void> main(List<String> args) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     try {
-      final dir = await getMeridixSupportDirectory();
+      final dir = await getAusrineSupportDirectory();
       final logDir = Directory(p.join(dir.path, 'logs'));
       if (!await logDir.exists()) await logDir.create(recursive: true);
       _globalLogFile = File(p.join(logDir.path, 'latest.log'));
@@ -52,7 +52,7 @@ Future<void> main(List<String> args) async {
         await _globalLogFile!.delete();
       }
       _globalLogFile!.writeAsStringSync(
-          '[${DateTime.now().toIso8601String()}] Meridix Launcher Started\n');
+          '[${DateTime.now().toIso8601String()}] Ausrinė Launcher Started\n');
       _logInfo('Logger initialized');
     } catch (_) {}
 
@@ -85,7 +85,7 @@ Future<void> main(List<String> args) async {
       skipTaskbar: false,
       titleBarStyle:
           Platform.isMacOS ? TitleBarStyle.hidden : TitleBarStyle.normal,
-      title: 'Meridix Launcher',
+      title: 'Ausrinė Launcher',
     );
 
     if (Platform.isWindows) {
@@ -119,19 +119,19 @@ Future<void> main(List<String> args) async {
 
     // ProviderScope enables Riverpod state management throughout app
     _logInfo('Running Flutter app');
-    runApp(const ProviderScope(child: MeridixLauncherApp()));
+    runApp(const ProviderScope(child: AusrineLauncherApp()));
   }, (error, stack) {
     _logError('Uncaught asynchronous error', error, stack);
   });
 }
 
-class MeridixLauncherApp extends StatelessWidget {
-  const MeridixLauncherApp({super.key});
+class AusrineLauncherApp extends StatelessWidget {
+  const AusrineLauncherApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Meridix Launcher',
+      title: 'Ausrinė Launcher',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.build(),
       routerConfig: appRouter,

@@ -13,11 +13,11 @@ import '../domain/user_account.dart';
 import '../data/ms_auth_service.dart';
 
 const _kAccountsFileName = 'accounts.dat';
-const _kAccountsKey = 'liquid_launcher_accounts';
+const _kAccountsKey = 'ausrine_launcher_accounts';
 
 // Fixed encryption key - secure storage only used on non-macOS platforms
 final _encKey = enc.Key(Uint8List.fromList(
-  'LiquidLauncherV1SecretKey!XMCLS1'.codeUnits,
+  'Ausrinė LauncherV1SecretKey!XMCLS1'.codeUnits,
 ));
 final _encrypter = enc.Encrypter(enc.AES(_encKey, mode: enc.AESMode.cbc));
 
@@ -81,7 +81,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final _secureStorage = const FlutterSecureStorage();
 
   Future<File> _getStorageFile() async {
-    final dir = await getMeridixSupportDirectory();
+    final dir = await getAusrineSupportDirectory();
     return File('${dir.path}/$_kAccountsFileName');
   }
 

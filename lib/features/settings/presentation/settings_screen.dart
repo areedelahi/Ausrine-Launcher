@@ -566,7 +566,7 @@ class _AboutPanel extends StatelessWidget {
                 height: 52,
               ),
               const SizedBox(height: AppSpacing.px12),
-              Text('Meridix Launcher',
+              Text('Ausrinė Launcher',
                   style: AppTypography.headlineLarge
                       .copyWith(color: colors.textHigh)),
               const SizedBox(height: 4),

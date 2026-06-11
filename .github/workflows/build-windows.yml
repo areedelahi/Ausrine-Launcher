@@ -40,7 +40,7 @@ jobs:
         run: flutter build windows --release
 
       - name: Create MSIX Package
-        run: dart run msix:create --build-windows false --install-certificate false --output-name meridix-launcher
+        run: dart run msix:create --build-windows false --install-certificate false --output-name ausrine-launcher
 
       - name: Find generated MSIX
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: meridix-launcher-windows-msix
+          name: ausrine-launcher-windows-msix
           path: "**/*.msix"
           retention-days: 30
           if-no-files-found: error
@@ -58,7 +58,7 @@ jobs:
       - name: Upload Windows portable artifact
         uses: actions/upload-artifact@v4
         with:
-          name: meridix-launcher-windows-portable
+          name: ausrine-launcher-windows-portable
           path: build/windows/x64/runner/Release/
           retention-days: 30
 
@@ -77,7 +77,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**/meridix-launcher.msix
+            artifacts/**/ausrine-launcher.msix
             artifacts/**/Release/**
           draft: false
           prerelease: false

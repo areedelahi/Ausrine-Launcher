@@ -980,7 +980,7 @@ class _SettingsTabState extends ConsumerState<_SettingsTab> {
 
     await ref.read(instancesProvider.notifier).updateInstance(updated);
     try {
-      final baseDir = await getMeridixSupportDirectory();
+      final baseDir = await getAusrineSupportDirectory();
       final logDir = Directory(p.join(baseDir.path, 'logs'));
       if (!await logDir.exists()) {
         await logDir.create(recursive: true);

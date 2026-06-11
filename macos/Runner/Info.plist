@@ -31,10 +31,10 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Liquid Launcher needs access to your Documents folder to read and save Minecraft instances and settings.</string>
+	<string>Ausrinė Launcher needs access to your Documents folder to read and save Minecraft instances and settings.</string>
 	<key>NSDesktopFolderUsageDescription</key>
-	<string>Liquid Launcher needs access to your Desktop folder to manage Minecraft instances.</string>
+	<string>Ausrinė Launcher needs access to your Desktop folder to manage Minecraft instances.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
-	<string>Liquid Launcher needs access to your Downloads folder to import modpacks and resources.</string>
+	<string>Ausrinė Launcher needs access to your Downloads folder to import modpacks and resources.</string>
 </dict>
 </plist>

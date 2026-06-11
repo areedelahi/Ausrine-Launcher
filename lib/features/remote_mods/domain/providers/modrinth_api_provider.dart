@@ -6,7 +6,7 @@ class ModrinthApiProvider {
   final Dio _dio = Dio(BaseOptions(
     baseUrl: 'https://api.modrinth.com/v2',
     headers: {
-      'User-Agent': 'Meridix Launcher/1.0.0 (areedelahi@gmail.com)',
+      'User-Agent': 'Ausrinė Launcher/1.0.0 (areedelahi@gmail.com)',
     },
   ));
 
