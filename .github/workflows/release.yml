@@ -52,7 +52,7 @@ jobs:
           tag_name: ${{ inputs.version_tag }}
           name: ${{ inputs.release_name }}
           files: |
-            release-assets/windows/*
+            release-assets/windows/**/*.msix
             release-assets/macos/*
           draft: false
           prerelease: false
