@@ -9,6 +9,7 @@ import 'src/rust/frb_generated.dart';
 
 import 'dart:async';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/platform/file_service.dart';
 import 'package:path/path.dart' as p;
 
@@ -71,11 +72,18 @@ Future<void> main(List<String> args) async {
     await windowManager.ensureInitialized();
     _logInfo('Window libraries initialized');
 
+    final prefs = await SharedPreferences.getInstance();
+    final width = prefs.getDouble('window_width') ?? 1280.0;
+    final height = prefs.getDouble('window_height') ?? 800.0;
+    final x = prefs.getDouble('window_x');
+    final y = prefs.getDouble('window_y');
+    final isMaximized = prefs.getBool('window_maximized') ?? false;
+
     // macOS hides native title bar for custom window chrome
     final options = WindowOptions(
-      size: const Size(1280, 800),
+      size: Size(width, height),
       minimumSize: const Size(960, 640),
-      center: true,
+      center: x == null || y == null,
       backgroundColor: const Color(0xFF0C0E13),
       skipTaskbar: false,
       titleBarStyle:
@@ -106,6 +114,12 @@ Future<void> main(List<String> args) async {
     _logInfo('Waiting until window is ready to show');
     await windowManager.waitUntilReadyToShow(options, () async {
       _logInfo('Showing main window');
+      if (x != null && y != null) {
+        await windowManager.setPosition(Offset(x, y));
+      }
+      if (isMaximized) {
+        await windowManager.maximize();
+      }
       await windowManager.setBackgroundColor(const Color(0xFF0C0E13));
       await windowManager.show();
       await windowManager.focus();
@@ -120,8 +134,63 @@ Future<void> main(List<String> args) async {
   });
 }
 
-class AusrineLauncherApp extends StatelessWidget {
+class AusrineLauncherApp extends StatefulWidget {
   const AusrineLauncherApp({super.key});
+
+  @override
+  State<AusrineLauncherApp> createState() => _AusrineLauncherAppState();
+}
+
+class _AusrineLauncherAppState extends State<AusrineLauncherApp> with WindowListener {
+  Timer? _saveTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(this);
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    _saveTimer?.cancel();
+    super.dispose();
+  }
+
+  void _scheduleSave() {
+    _saveTimer?.cancel();
+    _saveTimer = Timer(const Duration(milliseconds: 500), _saveWindowBounds);
+  }
+
+  Future<void> _saveWindowBounds() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isMaximized = await windowManager.isMaximized();
+      await prefs.setBool('window_maximized', isMaximized);
+
+      if (!isMaximized) {
+        final bounds = await windowManager.getBounds();
+        await prefs.setDouble('window_width', bounds.width);
+        await prefs.setDouble('window_height', bounds.height);
+        await prefs.setDouble('window_x', bounds.left);
+        await prefs.setDouble('window_y', bounds.top);
+      }
+    } catch (_) {
+      // Ignore errors if window is closing
+    }
+  }
+
+  @override
+  void onWindowResized() => _scheduleSave();
+
+  @override
+  void onWindowMoved() => _scheduleSave();
+
+  @override
+  void onWindowMaximize() => _scheduleSave();
+
+  @override
+  void onWindowUnmaximize() => _scheduleSave();
 
   @override
   Widget build(BuildContext context) {
