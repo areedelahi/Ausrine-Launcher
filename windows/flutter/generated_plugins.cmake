@@ -3,8 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  desktop_webview_window
   flutter_acrylic
+  flutter_inappwebview_windows
   flutter_secure_storage_windows
   screen_retriever
   url_launcher_windows

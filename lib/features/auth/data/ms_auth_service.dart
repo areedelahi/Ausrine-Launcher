@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:desktop_webview_window/desktop_webview_window.dart';
 import '../domain/user_account.dart';
+import '../presentation/microsoft_login_screen.dart';
 
 const _clientId = '00000000402b5328';
 const _scopes = 'service::user.auth.xboxlive.com::MBI_SSL';
@@ -40,7 +40,20 @@ class MsAuthService {
       },
     );
 
-    String code = await _getCodeFromWebView(authUrl.toString());
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MicrosoftLoginScreen(
+          authUrl: authUrl.toString(),
+          redirectUri: _redirectUri,
+        ),
+      ),
+    );
+
+    if (result == null) {
+      throw Exception('Login cancelled by user.');
+    }
+    
+    String code = result as String;
 
     final msTokens = await _exchangeCodeForMsToken(
       code: code,
@@ -165,51 +178,7 @@ class MsAuthService {
     return _extractSkinUrl(profile);
   }
 
-  Future<String> _getCodeFromWebView(String url) async {
-    final completer = Completer<String>();
 
-    try {
-      await WebviewWindow.clearAll();
-    } catch (e) {
-      debugPrint('Failed to clear Webview cache/cookies: $e');
-    }
-
-    final webview = await WebviewWindow.create(
-      configuration: const CreateConfiguration(
-        windowHeight: 700,
-        windowWidth: 500,
-        title: 'Sign in to Microsoft',
-        titleBarTopPadding: 0,
-      ),
-    );
-
-    webview.setOnUrlRequestCallback((urlStr) {
-      if (urlStr.startsWith(_redirectUri)) {
-        final uri = Uri.parse(urlStr);
-        final code = uri.queryParameters['code'];
-        final error = uri.queryParameters['error'];
-
-        if (code != null) {
-          if (!completer.isCompleted) completer.complete(code);
-          webview.close();
-        } else if (error != null) {
-          if (!completer.isCompleted) completer.completeError(Exception(error));
-          webview.close();
-        }
-      }
-      return false;
-    });
-
-    webview.onClose.whenComplete(() {
-      if (!completer.isCompleted) {
-        completer.completeError(Exception('Login cancelled by user.'));
-      }
-    });
-
-    webview.launch(url);
-
-    return completer.future;
-  }
 
   Future<Map<String, String>> _exchangeCodeForMsToken({
     required String code,
