@@ -39,7 +39,11 @@ jobs:
           Get-ChildItem -Path "build\windows\x64\runner\Release" -Filter "*.exe" | Select-Object FullName
 
       - name: Create MSIX Package
+<<<<<<< HEAD
         run: dart run msix:create --build-windows false --install-certificate false
+=======
+        run: dart run msix:create -v --install-certificate false
+>>>>>>> 03d8bd1 (docs)
 
       - name: Find generated MSIX
         run: |
