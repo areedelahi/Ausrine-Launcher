@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 import 'core/theme/app_theme.dart';
 import 'shell/app_router.dart';
-import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'src/rust/frb_generated.dart';
 
 import 'dart:async';
@@ -34,10 +33,6 @@ void _logError(String message, [Object? error, StackTrace? stack]) {
 }
 
 Future<void> main(List<String> args) async {
-  if (runWebViewTitleBarWidget(args)) {
-    return;
-  }
-
   // Catch uncaught async errors that bypass Flutter's error handlers
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
