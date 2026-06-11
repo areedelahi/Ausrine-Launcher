@@ -40,11 +40,7 @@ jobs:
         run: flutter build windows --release
 
       - name: Create MSIX Package
-<<<<<<< HEAD
         run: dart run msix:create --build-windows false --install-certificate false --output-name meridix-launcher
-=======
-        run: dart run msix:create -v --install-certificate false
->>>>>>> 03d8bd1 (docs)
 
       - name: Find generated MSIX
         run: |
