@@ -15,9 +15,9 @@ import '../data/ms_auth_service.dart';
 const _kAccountsFileName = 'accounts.dat';
 const _kAccountsKey = 'ausrine_launcher_accounts';
 
-// Fixed encryption key - secure storage only used on non-macOS platforms
+// Fixed 32-byte encryption key - secure storage only used on non-macOS platforms
 final _encKey = enc.Key(Uint8List.fromList(
-  'Ausrine LauncherV1SecretKey!XMCLS1'.codeUnits,
+  'AusrineLauncherV1SecretKeyXMCLS1'.codeUnits,
 ));
 final _encrypter = enc.Encrypter(enc.AES(_encKey, mode: enc.AESMode.cbc));
 
