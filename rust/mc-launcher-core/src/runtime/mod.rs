@@ -239,6 +239,7 @@ pub fn get_executable_path(
                     entry.path().join("bin").join("java"),
                     entry.path().join("bin").join("java.exe"),
                     entry.path().join("zulu-8.jre").join("Contents").join("Home").join("bin").join("java"),
+                    entry.path().join("Contents").join("Home").join("bin").join("java"),
                 ];
                 for path in &check_paths {
                     if path.is_file() {
@@ -419,6 +420,13 @@ fn install_zulu_jvm_runtime(
                     let mut perms = std::fs::metadata(&macos_java_bin)?.permissions();
                     perms.set_mode(0o755);
                     let _ = std::fs::set_permissions(&macos_java_bin, perms);
+                }
+                
+                let macos_java_bin_zip = entry.path().join("Contents").join("Home").join("bin").join("java");
+                if macos_java_bin_zip.exists() {
+                    let mut perms = std::fs::metadata(&macos_java_bin_zip)?.permissions();
+                    perms.set_mode(0o755);
+                    let _ = std::fs::set_permissions(&macos_java_bin_zip, perms);
                 }
             }
         }
