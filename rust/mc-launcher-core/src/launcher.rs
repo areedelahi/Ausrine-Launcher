@@ -59,7 +59,7 @@ impl Launcher {
                     path: PathBuf::from(""),
                 });
 
-                if let Err(e) = crate::runtime::install_jvm_runtime(&jvm_info.name, &self.minecraft_dir, reporter) {
+                if let Err(e) = crate::runtime::install_jvm_runtime(&jvm_info.name, jvm_info.java_major_version as u32, &self.minecraft_dir, reporter) {
                     return Err(LauncherError::Other {
                         message: format!("Failed to install Java: {}", e),
                     });
@@ -82,7 +82,9 @@ impl Launcher {
                     let version_id = version_id(&profile, "loader profile")?.to_string();
                     write_loader_profile(&self.minecraft_dir, &profile)?;
                     let merged = self.load_version(&version_id)?;
-                    install_version_files(&merged, &self.minecraft_dir, reporter)?;
+                    let platform = crate::platform::Platform::current();
+                    let compatibility = crate::compatibility::apply_compatibility(&merged, platform, crate::compatibility::CompatibilityPolicy::Auto);
+                    install_version_files(&compatibility.version, &self.minecraft_dir, reporter)?;
                     return Ok(InstallResult { version_id });
                 }
                 LoaderSpec::Quilt { version } => {
@@ -94,7 +96,9 @@ impl Launcher {
                     let version_id = version_id(&profile, "loader profile")?.to_string();
                     write_loader_profile(&self.minecraft_dir, &profile)?;
                     let merged = self.load_version(&version_id)?;
-                    install_version_files(&merged, &self.minecraft_dir, reporter)?;
+                    let platform = crate::platform::Platform::current();
+                    let compatibility = crate::compatibility::apply_compatibility(&merged, platform, crate::compatibility::CompatibilityPolicy::Auto);
+                    install_version_files(&compatibility.version, &self.minecraft_dir, reporter)?;
                     return Ok(InstallResult { version_id });
                 }
                 LoaderSpec::Forge { version } => {
@@ -173,7 +177,9 @@ impl Launcher {
     ) -> Result<()> {
         let version = fetch_vanilla_version(version_id)?;
         write_version_json(&self.minecraft_dir, &version)?;
-        install_version_files(&version, &self.minecraft_dir, reporter)
+        let platform = crate::platform::Platform::current();
+        let compatibility = crate::compatibility::apply_compatibility(&version, platform, crate::compatibility::CompatibilityPolicy::Auto);
+        install_version_files(&compatibility.version, &self.minecraft_dir, reporter)
     }
 }
 
