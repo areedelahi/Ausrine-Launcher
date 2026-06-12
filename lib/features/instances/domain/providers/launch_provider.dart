@@ -22,7 +22,12 @@ class LaunchService {
       throw Exception('Please select an account in Settings first.');
     }
 
-    final acc = authState.activeAccount!;
+    final initialAcc = authState.activeAccount!;
+    if (initialAcc.type == 'microsoft') {
+      await ref.read(authProvider.notifier).refreshIfNeeded(initialAcc.uuid);
+    }
+    
+    final acc = ref.read(authProvider).activeAccount!;
     final isOffline = acc.type == 'offline';
 
     String? javaExe = instance.javaPath ?? settings.javaExecutable;
@@ -58,6 +63,7 @@ class LaunchService {
         : ramArgs;
 
     try {
+      print("Launching game...");
       final stream = launchInstance(
         minecraftDir: await repo.getLauncherRoot(),
         instanceDir: await repo.getInstancePath(instance.id),
@@ -74,9 +80,10 @@ class LaunchService {
       DateTime? startTime;
 
       // Track start time for play duration calculation
-      stream.listen((event) {
+      final subscription = stream.listen((event) {
         event.when(
           started: (pid) {
+            print("Received started event from Rust! PID: $pid");
             startTime = DateTime.now();
             ref.read(runningInstancesProvider.notifier).setRunning(instance.id, pid);
 
@@ -87,6 +94,7 @@ class LaunchService {
             );
           },
           exited: (code) {
+            print("Received exited event from Rust! Code: $code");
             ref.read(runningInstancesProvider.notifier).setExited(instance.id);
 
             // Accumulate total playtime when instance closes
@@ -105,8 +113,12 @@ class LaunchService {
       }, onError: (error) {
         ref.read(runningInstancesProvider.notifier).setExited(instance.id);
         print("Error during active launch stream: $error");
-        throw Exception("Launcher stream failed: $error");
+      }, onDone: () {
+        print("Launch stream closed by Rust.");
       });
+
+      // Keep subscription alive in provider state to prevent GC
+      _subscriptions[instance.id] = subscription;
     } catch (e) {
       ref.read(runningInstancesProvider.notifier).setExited(instance.id);
       print("Failed to start launch process: $e");
@@ -118,3 +130,6 @@ class LaunchService {
 final launchServiceProvider = Provider<LaunchService>((ref) {
   return LaunchService(ref);
 });
+
+// Store active subscriptions to prevent GC
+final Map<String, dynamic> _subscriptions = {};

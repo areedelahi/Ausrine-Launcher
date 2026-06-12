@@ -159,7 +159,10 @@ class _InstanceDetailScreenState extends ConsumerState<InstanceDetailScreen> {
                               print("Update check failed (offline mode?): $downloadError");
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Offline Mode: Skipping updates...')),
+                                  const SnackBar(
+                                    content: Text('Offline Mode: Skipping updates. If game files are incomplete, the game may not launch properly.'),
+                                    duration: Duration(seconds: 4),
+                                  ),
                                 );
                               }
                             }
@@ -167,18 +170,9 @@ class _InstanceDetailScreenState extends ConsumerState<InstanceDetailScreen> {
                             final instancesList =
                                 ref.read(instancesProvider).value ?? [];
                             final updatedInstance = instancesList.firstWhere(
-                              (i) => i.id == instance.id,
+                              (i) => i.id == widget.id,
                               orElse: () => instance,
                             );
-
-                            if (updatedInstance.minecraftVersion !=
-                                    instance.minecraftVersion ||
-                                updatedInstance.loader != instance.loader ||
-                                updatedInstance.loaderVersion !=
-                                    instance.loaderVersion) {
-                              throw Exception(
-                                  'Version configuration was changed during download. Please click Launch again to download the new version.');
-                            }
 
                             await ref
                                 .read(launchServiceProvider)

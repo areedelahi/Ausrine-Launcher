@@ -87,12 +87,24 @@ pub fn launch_instance(
     #[cfg(windows)]
     use std::os::windows::process::CommandExt;
     
-    let mut cmd = Command::new(&command.executable);
-    cmd.args(&command.args)
-       .current_dir(&command.working_dir);
-       
     #[cfg(windows)]
-    cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
+    let mut cmd = Command::new(&command.executable);
+    #[cfg(windows)]
+    cmd.args(&command.args)
+       .current_dir(&command.working_dir)
+       .creation_flags(0x08000000); // CREATE_NO_WINDOW
+
+    #[cfg(not(windows))]
+    let mut cmd = Command::new(&command.executable);
+    #[cfg(not(windows))]
+    {
+        use std::os::unix::process::CommandExt;
+        cmd.args(&command.args)
+           .current_dir(&command.working_dir)
+           .process_group(0);
+    }
+
+    println!("Executing wrapped: {:?}", cmd);
 
     let mut child = cmd.spawn()?;
 

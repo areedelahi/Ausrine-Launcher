@@ -52,7 +52,20 @@ class _LaunchBarState extends ConsumerState<LaunchBar>
     setState(() => _isLaunching = true);
     try {
 
-      final newProfileId = await ref.read(downloadsProvider.notifier).startDownload(instance);
+      String? newProfileId;
+      try {
+        newProfileId = await ref.read(downloadsProvider.notifier).startDownload(instance);
+      } catch (downloadError) {
+        print("Update check failed (offline mode?): $downloadError");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Offline Mode: Skipping updates. If game files are incomplete, the game may not launch properly.'),
+              duration: Duration(seconds: 4),
+            ),
+          );
+        }
+      }
 
       final instances = ref.read(instancesProvider).value ?? [];
       final updatedInstance = instances.firstWhere(
@@ -60,24 +73,9 @@ class _LaunchBarState extends ConsumerState<LaunchBar>
         orElse: () => instance,
       );
 
-      if (updatedInstance.minecraftVersion != instance.minecraftVersion || 
-          updatedInstance.loader != instance.loader || 
-          updatedInstance.loaderVersion != instance.loaderVersion) {
-        throw Exception('Version configuration was changed during download. Please click Play again to download the new version.');
-      }
-
       final launchInstance = updatedInstance.copyWith(
         profileId: newProfileId ?? updatedInstance.profileId
       );
-
-      if (instance.profileId != newProfileId) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Ready to play! Click Play again to launch the game.')),
-          );
-        }
-        return;
-      }
 
       await ref.read(launchServiceProvider).launch(launchInstance);
     } catch (e) {

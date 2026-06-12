@@ -121,6 +121,10 @@ Future<void> main(List<String> args) async {
       await windowManager.show();
       await windowManager.focus();
       if (isMaximized) {
+        if (Platform.isWindows) {
+          // Delay to ensure the window is fully mapped before maximizing
+          await Future.delayed(const Duration(milliseconds: 100));
+        }
         await windowManager.maximize();
       }
       _logInfo('Main window shown');
@@ -165,15 +169,20 @@ class _AusrineLauncherAppState extends State<AusrineLauncherApp> with WindowList
   Future<void> _saveWindowBounds() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      // On Windows, checking isMaximized during close might return false.
+      // So we rely on the state being correctly saved during the events.
       final isMaximized = await windowManager.isMaximized();
       await prefs.setBool('window_maximized', isMaximized);
 
       if (!isMaximized) {
         final bounds = await windowManager.getBounds();
-        await prefs.setDouble('window_width', bounds.width);
-        await prefs.setDouble('window_height', bounds.height);
-        await prefs.setDouble('window_x', bounds.left);
-        await prefs.setDouble('window_y', bounds.top);
+        // Prevent saving bounds if the window is minimized or collapsed
+        if (bounds.width > 0 && bounds.height > 0) {
+          await prefs.setDouble('window_width', bounds.width);
+          await prefs.setDouble('window_height', bounds.height);
+          await prefs.setDouble('window_x', bounds.left);
+          await prefs.setDouble('window_y', bounds.top);
+        }
       }
     } catch (_) {
       // Ignore errors if window is closing
