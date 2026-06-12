@@ -14,9 +14,10 @@ A fast, clean Minecraft launcher for Mac, Windows, and Linux.
 
 ### Windows
 
-1. Download the latest ".msix" file
-2. Double-Click the file and install
-3. thats it, just open the file
+1. Download the latest ".zip" file
+2. Extract it.
+3. Double-Click the exe file inside
+4. thats it, play
 
 ### Linux (Coming Soon)
 
