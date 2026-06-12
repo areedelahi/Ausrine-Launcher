@@ -11,7 +11,7 @@ use crate::{
         rules::FeatureSet,
         version::VersionJson,
     },
-    platform::{Os, Platform},
+    platform::{Arch, Os, Platform},
     LauncherError, Result,
 };
 
