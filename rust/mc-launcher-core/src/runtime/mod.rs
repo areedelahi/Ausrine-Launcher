@@ -80,28 +80,19 @@ pub fn install_jvm_runtime(
         .json()?;
     let platform_string = get_jvm_platform_string();
 
-    if !manifest_data
+    let empty_map = HashMap::new();
+    let platform_data = manifest_data
         .get(&platform_string)
-        .unwrap_or(&HashMap::new())
-        .contains_key(jvm_version)
-    {
+        .unwrap_or(&empty_map);
+
+    let has_valid_mojang_runtime = platform_data.contains_key(jvm_version) 
+        && !platform_data.get(jvm_version).unwrap().is_empty();
+
+    if !has_valid_mojang_runtime {
         return install_zulu_jvm_runtime(java_major_version, jvm_version, minecraft_directory, reporter);
     }
 
-
-    if manifest_data
-        .get(&platform_string)
-        .unwrap_or(&HashMap::new())
-        .get(jvm_version)
-        .unwrap_or(&Vec::new())
-        .len()
-        == 0
-    {
-        return Err("platform manifest not exist.".into());
-    }
-    let platform_manifest_url = manifest_data
-        .get(&platform_string)
-        .unwrap()
+    let platform_manifest_url = platform_data
         .get(jvm_version)
         .unwrap()[0]
         .manifest
