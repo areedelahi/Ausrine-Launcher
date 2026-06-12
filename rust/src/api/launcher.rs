@@ -49,7 +49,7 @@ pub fn launch_instance(
     let mut options = LaunchOptions {
         account,
         java_executable: java_path,
-        launcher_name: "Meridix Launcher".to_string(),
+        launcher_name: "Ausrine Launcher".to_string(),
         launcher_version: "1.0.0".to_string(),
         natives_directory: Some(natives_dir),
         game_directory: Some(game_dir),
@@ -84,10 +84,17 @@ pub fn launch_instance(
             .status();
     }
 
-    let mut child = Command::new(&command.executable)
-        .args(&command.args)
-        .current_dir(&command.working_dir)
-        .spawn()?;
+    #[cfg(windows)]
+    use std::os::windows::process::CommandExt;
+    
+    let mut cmd = Command::new(&command.executable);
+    cmd.args(&command.args)
+       .current_dir(&command.working_dir);
+       
+    #[cfg(windows)]
+    cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
+
+    let mut child = cmd.spawn()?;
 
     let pid = child.id();
     let _ = sink.add(LaunchEvent::Started { pid });

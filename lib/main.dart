@@ -117,12 +117,12 @@ Future<void> main(List<String> args) async {
       if (x != null && y != null) {
         await windowManager.setPosition(Offset(x, y));
       }
-      if (isMaximized) {
-        await windowManager.maximize();
-      }
       await windowManager.setBackgroundColor(const Color(0xFF0C0E13));
       await windowManager.show();
       await windowManager.focus();
+      if (isMaximized) {
+        await windowManager.maximize();
+      }
       _logInfo('Main window shown');
     });
 
