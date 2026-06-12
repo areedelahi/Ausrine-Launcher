@@ -307,9 +307,16 @@ pub fn get_version_runtime_information(
         Ok(json_data) => json_data,
         Err(_) => return None,
     };
+    
+    // Older Minecraft versions (1.12.2 and older) do not have a javaVersion field.
+    // They inherently require Java 8 (jre-legacy).
     if data.java_version.is_none() {
-        return None;
+        return Some(VersionRuntimeInformation {
+            name: "jre-legacy".to_string(),
+            java_major_version: 8,
+        });
     }
+
     Some(VersionRuntimeInformation {
         name: data.java_version.clone().unwrap().component,
         java_major_version: data.java_version.clone().unwrap().major_version,
