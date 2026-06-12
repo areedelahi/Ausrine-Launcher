@@ -157,6 +157,11 @@ pub fn build_launch_command_for_platform(
             platform,
         ));
     }
+    
+    if platform.os == Os::MacOs && !args.contains(&"-XstartOnFirstThread".to_string()) {
+        args.insert(0, "-XstartOnFirstThread".to_string());
+    }
+    
     args.push(main_class);
 
     if version.minecraft_arguments.is_some() {
