@@ -200,7 +200,22 @@ impl VersionJson {
         self.assets = child.assets.clone().or(self.assets);
         self.asset_index = child.asset_index.clone().or(self.asset_index);
         self.downloads.extend(child.downloads.clone());
-        self.libraries.extend(child.libraries.clone());
+
+        let mut child_bases = std::collections::HashSet::new();
+        for lib in &child.libraries {
+            let base_name = lib.name.split(':').take(2).collect::<Vec<_>>().join(":");
+            child_bases.insert(base_name);
+        }
+        let mut merged_libraries = Vec::new();
+        for lib in &self.libraries {
+            let base_name = lib.name.split(':').take(2).collect::<Vec<_>>().join(":");
+            if !child_bases.contains(&base_name) {
+                merged_libraries.push(lib.clone());
+            }
+        }
+        merged_libraries.extend(child.libraries.clone());
+        self.libraries = merged_libraries;
+
         self.arguments.game.extend(child.arguments.game.clone());
         self.arguments.jvm.extend(child.arguments.jvm.clone());
         self.minecraft_arguments = child
@@ -208,8 +223,8 @@ impl VersionJson {
             .clone()
             .or(self.minecraft_arguments);
         self.java_version = child.java_version.clone().or(self.java_version);
+        self.jar = child.jar.clone().or(self.jar);
         self.logging.extend(child.logging.clone());
-        self.jar = child.jar.clone().or(self.jar).or(inherited_parent);
         self.release_time = child.release_time.clone().or(self.release_time);
         self.time = child.time.clone().or(self.time);
         self.compliance_level = child.compliance_level.or(self.compliance_level);

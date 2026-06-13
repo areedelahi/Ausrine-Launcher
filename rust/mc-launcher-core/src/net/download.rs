@@ -45,15 +45,19 @@ pub struct DownloadPlan {
 }
 
 pub fn should_skip_existing(task: &DownloadTask) -> Result<bool> {
-    if !task.destination.is_file() {
+    if !task.destination.exists() {
         return Ok(false);
     }
-
-    match &task.checksum {
-        Some(Checksum::Sha1(expected)) => Ok(sha1_file(&task.destination)? == *expected),
-        Some(Checksum::Sha256(_)) => Ok(false),
-        None => Ok(true),
+    if let Some(Checksum::Sha1(expected)) = &task.checksum {
+        let actual = sha1_file(&task.destination)?;
+        if actual == *expected {
+            return Ok(true);
+        }
+        // Delete the corrupted file
+        let _ = fs::remove_file(&task.destination);
+        return Ok(false);
     }
+    Ok(true)
 }
 
 struct ProgressWrapper<R, F> {
@@ -147,6 +151,7 @@ pub fn execute_plan_sequential(plan: &DownloadPlan, reporter: &mut dyn ProgressR
         if let Some(Checksum::Sha1(expected)) = &task.checksum {
             let actual = sha1_file(&task.destination)?;
             if actual != *expected {
+                let _ = fs::remove_file(&task.destination);
                 return Err(LauncherError::ChecksumMismatch {
                     path: task.destination.clone(),
                     expected: expected.clone(),
@@ -283,21 +288,21 @@ pub fn execute_plan(plan: &DownloadPlan, reporter: &mut dyn ProgressReporter) ->
                 }
 
                 if let Some(Checksum::Sha1(expected)) = &task.checksum {
-                    match sha1_file(&task.destination) {
-                        Ok(actual) => {
-                            if actual != *expected {
-                                let _ = tx.send(Err(LauncherError::ChecksumMismatch {
-                                    path: task.destination.clone(),
-                                    expected: expected.clone(),
-                                    actual,
-                                }));
-                                return;
-                            }
-                        }
+                    let actual = match sha1_file(&task.destination) {
+                        Ok(a) => a,
                         Err(e) => {
-                            let _ = tx.send(Err(e));
+                            let _ = tx.send(Err(e.into()));
                             return;
                         }
+                    };
+                    if actual != *expected {
+                        let _ = fs::remove_file(&task.destination);
+                        let _ = tx.send(Err(LauncherError::ChecksumMismatch {
+                            path: task.destination.clone(),
+                            expected: expected.clone(),
+                            actual,
+                        }.into()));
+                        return;
                     }
                 }
 
