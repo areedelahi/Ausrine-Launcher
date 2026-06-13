@@ -1,0 +1,3 @@
+#!/bin/bash
+export JAVA_HOME="/Users/areedelahi/Documents/mc/runtime/jre-legacy/mac-os-arm64/jre-legacy/zulu8.94.0.17-ca-fx-jre8.0.492-macosx_aarch64/Contents/Home"
+exec "$JAVA_HOME/bin/java" -version > /Users/areedelahi/Documents/MCdevelopment/xmclswiftui/liquid_launcher/wrapper2.log 2>&1

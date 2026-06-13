@@ -1,0 +1,2 @@
+#!/bin/bash
+"/Users/areedelahi/Documents/mc/runtime/jre-legacy/mac-os-arm64/jre-legacy/zulu8.94.0.17-ca-fx-jre8.0.492-macosx_aarch64/Contents/Home/bin/java" -version > /Users/areedelahi/Documents/MCdevelopment/xmclswiftui/liquid_launcher/wrapper.log 2>&1
