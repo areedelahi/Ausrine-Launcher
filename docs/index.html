@@ -169,12 +169,11 @@
                 <!-- Windows Download Split -->
                 <div class="w-full sm:w-72 flex rounded-app-lg shadow-lg border border-transparent hover:border-white/10 overflow-hidden group">
                     <!-- Main MSIX (75%) -->
-                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-Launcher.msix" class="interactive-element w-[75%] flex items-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden" title="Download Windows Installer">
+                    <a href="#" onclick="showMsixModal(event)" class="interactive-element w-[75%] flex items-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden" title="Download Windows Installer">
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                         <i class="fa-brands fa-microsoft text-2xl shrink-0"></i>
                         <div class="flex flex-col items-start text-left">
                             <span class="font-semibold text-sm leading-tight">Download for Windows</span>
-                            <span class="text-[10px] text-white/80 font-medium">.msix</span>
                         </div>
                     </a>
                     
@@ -182,7 +181,7 @@
                     <div class="w-[1px] bg-white/20 z-10 relative"></div>
                     
                     <!-- Portable Zip (25%) -->
-                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip" class="interactive-element w-[25%] flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden" title="Download Portable ZIP">
+                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip" onclick="showPortableModal()" class="interactive-element w-[25%] flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden" title="Download Portable ZIP">
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
                         <i class="fa-solid fa-file-zipper text-xl mb-1"></i>
                         <span class="text-[10px] font-medium text-white/90 leading-tight">Portable</span>
@@ -190,7 +189,7 @@
                 </div>
 
                 <!-- macOS Download -->
-                <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg" class="interactive-element w-full sm:w-72 flex items-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
+                <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg" onclick="showMacModal()" class="interactive-element w-full sm:w-72 flex items-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
                     <i class="fa-brands fa-apple text-3xl"></i>
                     <div class="flex flex-col items-start text-left">
                         <span class="font-semibold text-base">Download for macOS</span>
@@ -412,6 +411,86 @@
         </div>
     </footer>
 
+    <!-- Global Modal Container -->
+    <div id="infoModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300" id="modalPanel">
+            <!-- Header -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-app-glassBorder bg-app-surface">
+                <h3 id="modalTitle" class="text-lg font-bold text-app-textHigh">Title</h3>
+                <button onclick="closeModal()" class="text-app-textMed hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div id="modalBody" class="p-6 text-app-textMed text-sm leading-relaxed">
+                <!-- Content injected via JS -->
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t border-app-glassBorder bg-app-surface flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-2 bg-app-primary hover:bg-app-primaryHover text-white rounded-app-md font-medium transition-colors text-sm">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('infoModal');
+        const modalPanel = document.getElementById('modalPanel');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function showModal(title, content) {
+            modalTitle.innerText = title;
+            modalBody.innerHTML = content;
+            
+            modal.classList.remove('hidden');
+            // Small delay to allow CSS transition to work
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalPanel.classList.remove('scale-95');
+                modalPanel.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalPanel.classList.remove('scale-100');
+            modalPanel.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function showMsixModal(e) {
+            e.preventDefault();
+            showModal(
+                "Microsoft Store Approval Pending",
+                "<p class='mb-3'>The Windows Installer for Ausrine Launcher is currently pending approval on the Microsoft Store.</p><p>In the meantime, please download the <strong>Portable version</strong> (the ZIP button next to it), which requires no installation and is ready to use immediately.</p>"
+            );
+        }
+
+        function showPortableModal() {
+            showModal(
+                "Using the Portable Version",
+                "<p class='mb-3'>Your download is starting! To play:</p><ol class='list-decimal pl-5 space-y-2 text-app-textHigh'><li>Extract the downloaded <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>.zip</code> archive to a folder.</li><li>Open the extracted folder and double-click <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>ausrine_launcher.exe</code>.</li></ol>"
+            );
+        }
+
+        function showMacModal() {
+            showModal(
+                "macOS Installation Guide",
+                "<p class='mb-3'>Your download will start automatically. Follow these steps to install:</p><ol class='list-decimal pl-5 space-y-3 text-app-textHigh'><li><strong>Install:</strong> Open the downloaded <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>.dmg</code> file and drag \"Ausrine Launcher\" to your Applications folder.</li><li><strong>First Launch:</strong> Double-click the app in your Applications folder. You may see a warning that the app is from an unidentified developer. This is normal for open-source apps not signed with an Apple Developer account. Click <strong>OK</strong>.</li><li><strong>Allow Execution:</strong> Open System Settings and search for <strong>Privacy & Security</strong>. Scroll down to the bottom.</li><li><strong>Approve:</strong> You will see a message that Ausrine Launcher was blocked. Click <strong>Open Anyway</strong> to launch the app. You only need to do this once!</li></ol>"
+            );
+        }
+    </script>
 </body>
 </html>
 
