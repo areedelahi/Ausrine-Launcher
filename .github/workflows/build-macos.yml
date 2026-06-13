@@ -1,0 +1,107 @@
+name: Build macOS DMG
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust -> target
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Rust library
+        run: |
+          cd rust_builder
+          flutter pub get
+          cd ..
+
+      - name: Build macOS app
+        run: flutter build macos --release
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG
+        run: |
+          mkdir -p build/macos/dmg_staging
+          mkdir -p build/macos/Release
+
+          # Copy the app to the staging directory
+          cp -r "build/macos/Build/Products/Release/Ausrine Launcher.app" build/macos/dmg_staging/
+
+          # Generate the styled DMG
+          create-dmg \
+            --volname "Ausrine Launcher" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 130 \
+            --icon "Ausrine Launcher.app" 150 190 \
+            --hide-extension "Ausrine Launcher.app" \
+            --app-drop-link 450 190 \
+            build/macos/Release/Ausrine-Launcher.dmg \
+            build/macos/dmg_staging/
+
+      - name: Sign DMG
+        continue-on-error: true
+        run: |
+          codesign -s "${{ secrets.MACOS_CERTIFICATE_ID }}" \
+            --options runtime \
+            build/macos/Release/Ausrine-Launcher.dmg
+
+      - name: Notarize DMG
+        continue-on-error: true
+        run: |
+          xcrun notarytool submit build/macos/Release/Ausrine-Launcher.dmg \
+            --apple-id "${{ secrets.MACOS_NOTARY_USER }}" \
+            --password "${{ secrets.MACOS_NOTARY_PASSWORD }}" \
+            --team-id "${{ secrets.MACOS_TEAM_ID }}" \
+            --wait
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ausrine-launcher-macos-arm64
+          path: build/macos/Release/Ausrine-Launcher.dmg
+          retention-days: 30
+
+  create-release:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Create Release
+        # Bumped to v2 to avoid Node 16 deprecation warnings on GitHub Actions
+        uses: softprops/action-gh-release@v2 
+        with:
+          files: artifacts/**/Ausrine-Launcher.dmg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

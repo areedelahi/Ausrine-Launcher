@@ -1,0 +1,311 @@
+{
+  "images": [
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "main_16.png",
+      "scale": "1x"
+    },
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "main_32.png",
+      "scale": "2x"
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "main_32.png",
+      "scale": "1x"
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "main_64.png",
+      "scale": "2x"
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "main_128.png",
+      "scale": "1x"
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "main_256.png",
+      "scale": "2x"
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "main_256.png",
+      "scale": "1x"
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "main_512.png",
+      "scale": "2x"
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "main_512.png",
+      "scale": "1x"
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "main_1024.png",
+      "scale": "2x"
+    },
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "dark_16.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "dark_32.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "dark_32.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "dark_64.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "dark_128.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "dark_256.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "dark_256.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "dark_512.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "dark_512.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "dark_1024.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "tinted_16.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "16x16",
+      "idiom": "mac",
+      "filename": "tinted_32.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "tinted_32.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "32x32",
+      "idiom": "mac",
+      "filename": "tinted_64.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "tinted_128.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "128x128",
+      "idiom": "mac",
+      "filename": "tinted_256.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "tinted_256.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "256x256",
+      "idiom": "mac",
+      "filename": "tinted_512.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "tinted_512.png",
+      "scale": "1x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    },
+    {
+      "size": "512x512",
+      "idiom": "mac",
+      "filename": "tinted_1024.png",
+      "scale": "2x",
+      "appearances": [
+        {
+          "appearance": "luminosity",
+          "value": "tinted"
+        }
+      ]
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  },
+  "properties": {
+    "creates-macos-icon-variants": true
+  }
+}

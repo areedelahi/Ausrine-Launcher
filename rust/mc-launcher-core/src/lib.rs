@@ -1,0 +1,24 @@
+
+
+#![warn(rustdoc::broken_intra_doc_links)]
+
+pub mod account;
+pub mod auth;
+pub mod command;
+pub mod compatibility;
+pub mod core;
+pub mod error;
+pub mod forge;
+pub mod install;
+pub mod io;
+pub mod launcher;
+pub mod loader;
+pub mod net;
+pub mod platform;
+pub mod prelude;
+pub mod progress;
+pub mod runtime;
+pub mod types;
+pub mod utils;
+
+pub use error::{LauncherError, Result};

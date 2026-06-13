@@ -1,0 +1,54 @@
+name: Test MSIX Packaging Only
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  test-msix:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Download previous build artifact
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build-windows.yml
+          name: ausrine-launcher-windows-portable
+          path: build/windows/x64/runner/Release
+
+      - name: Verify build files exist
+        run: |
+          echo "=== Build directory contents ==="
+          Get-ChildItem -Path "build\windows\x64\runner\Release" -Recurse | Select-Object FullName, Length
+          echo "=== Looking for .exe files ==="
+          Get-ChildItem -Path "build\windows\x64\runner\Release" -Filter "*.exe" | Select-Object FullName
+
+      - name: Create MSIX Package
+        run: dart run msix:create --build-windows false --install-certificate false
+
+      - name: Find generated MSIX
+        run: |
+          echo "=== Searching for .msix files ==="
+          Get-ChildItem -Path . -Filter "*.msix" -Recurse | Select-Object FullName, Length
+
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ausrine-launcher-msix
+          path: "**/*.msix"
+          if-no-files-found: error

@@ -1,0 +1,33 @@
+name: Update Download Count
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to manually trigger it from the Actions tab
+
+jobs:
+  update-count:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Fetch and update downloads count
+        run: |
+          COUNT=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases | jq '[.[].assets[].download_count] | add')
+          
+          if [ "$COUNT" = "null" ] || [ -z "$COUNT" ]; then
+            COUNT=0
+          fi
+
+          echo "Total Downloads: $COUNT" > downloads.txt
+          echo "Last Updated: $(date -u)" >> downloads.txt
+          
+      - name: Commit and Push
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add downloads.txt
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: Update download count to $COUNT [skip ci]" && git push)

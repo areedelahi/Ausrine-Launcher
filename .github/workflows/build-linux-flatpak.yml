@@ -1,0 +1,81 @@
+name: Build Linux Flatpak
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: Build Linux ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x64
+            target: x86_64-unknown-linux-gnu
+          - os: ubuntu-24.04-arm
+            arch: arm64
+            target: aarch64-unknown-linux-gnu
+            
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter (x64)
+        if: matrix.arch == 'x64'
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Setup Flutter (arm64)
+        if: matrix.arch == 'arm64'
+        run: |
+          git clone https://github.com/flutter/flutter.git -b stable $GITHUB_WORKSPACE/flutter
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+
+      - name: Install Linux Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev libsecret-1-dev libjsoncpp-dev flatpak flatpak-builder
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust -> target
+
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Build Rust library
+        run: |
+          cd rust_builder
+          flutter pub get
+          cd ..
+
+      - name: Build Linux app
+        run: flutter build linux --release
+
+      - name: Prepare Flatpak Bundle Directory
+        run: |
+          cp -r build/linux/${{ matrix.arch }}/release/bundle packaging/linux/bundle
+
+      - name: Build Flatpak
+        run: |
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user -y flathub org.gnome.Platform//45 org.gnome.Sdk//45
+          flatpak-builder --user --repo=repo --force-clean build-dir packaging/linux/com.areedelahi.ausrine.yml
+          flatpak build-bundle repo ausrine-launcher-linux-${{ matrix.arch }}.flatpak com.areedelahi.ausrine
+
+      - name: Upload Flatpak Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ausrine-launcher-linux-${{ matrix.arch }}-flatpak
+          path: ausrine-launcher-linux-${{ matrix.arch }}.flatpak
+          retention-days: 30
+          if-no-files-found: error

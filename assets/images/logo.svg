@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" stop-color="#0038A8"/>
+      <stop offset="1" stop-color="#00020A"/>
+    </linearGradient>
+    
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)"/>
+
+  <g transform="translate(24, -24)">
+    <rect x="88" y="328" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+    <rect x="136" y="376" width="48" height="48" fill="#003BCC" filter="url(#subtleShadow)"/>
+    <rect x="136" y="280" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    <rect x="184" y="328" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    <rect x="184" y="280" width="48" height="48" fill="#001538" filter="url(#subtleShadow)"/>
+    <rect x="184" y="232" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    <rect x="232" y="280" width="48" height="48" fill="#003BCC" filter="url(#subtleShadow)" />
+    <rect x="232" y="184" width="48" height="48" fill="#2C9AFF" filter="url(#subtleShadow)"/>
+    <rect x="280" y="232" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    <rect x="280" y="184" width="48" height="48" fill="#001538" filter="url(#subtleShadow)"/>
+    <rect x="280" y="136" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    <rect x="328" y="184" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)"/>
+    
+    <rect x="208" y="256" width="48" height="48" fill="#FFFFFF" filter="url(#subtleShadow)"/>
+  </g>
+</svg>

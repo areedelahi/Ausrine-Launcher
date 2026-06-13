@@ -1,0 +1,95 @@
+name: ausrine_launcher
+description: "Ausrine Launcher — Cross-platform Minecraft launcher for Windows, macOS & Linux."
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^14.2.0
+
+  # Window & platform
+  window_manager: ^0.3.9
+  flutter_acrylic: ^1.1.4
+
+  # UI & fonts
+  google_fonts: ^6.2.1
+
+  # File paths
+  path_provider: ^2.1.3
+  path: ^1.9.0
+
+  # HTTP
+  dio: ^5.4.3
+  http: ^1.2.1
+
+  # Open browser for OAuth
+  url_launcher: ^6.2.5
+
+  # Encrypted token storage
+  flutter_secure_storage: ^9.0.0
+
+  # Crypto: PKCE SHA-256
+  crypto: ^3.0.3
+
+  # UUID generation
+  uuid: ^4.3.3
+  flutter_inappwebview: ^6.1.5
+  encrypt: ^5.0.3
+  shared_preferences: ^2.5.5
+
+  # Image caching (player head avatars)
+  cached_network_image: ^3.3.1
+
+  # File picker (skin upload)
+  file_picker: ^8.0.6
+  equatable: ^2.0.8
+  flutter_rust_bridge: 2.12.0
+  rust_lib_ausrine_launcher:
+    path: rust_builder
+  freezed_annotation: ^3.1.0
+  reorderable_grid_view: ^2.2.8
+  archive: ^3.6.1
+  flutter_svg: ^2.3.0
+  file_selector: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  integration_test:
+    sdk: flutter
+  freezed: ^3.2.5
+  build_runner: ^2.15.0
+  msix: ^3.16.13
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+msix_config:
+  display_name: Ausrine Launcher
+  publisher_display_name: areedelahi
+  identity_name: com.areedelahi.ausrine
+  msix_version: 1.0.0.0
+  publisher: CN=areedelahi
+  logo_path: assets/images/app_icon.png
+
+flutter_launcher_icons:
+  image_path: "assets/images/app_icon.png"
+  windows:
+    generate: true
+    image_path: "assets/images/app_icon.png"
+

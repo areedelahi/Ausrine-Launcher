@@ -1,0 +1,24 @@
+app-id: com.areedelahi.ausrine
+runtime: org.gnome.Platform
+runtime-version: '45'
+sdk: org.gnome.Sdk
+command: ausrine_launcher
+finish-args:
+  - --share=network
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=home
+modules:
+  - name: ausrine-launcher
+    buildsystem: simple
+    build-commands:
+      - cp -a * /app/
+      - chmod +x /app/ausrine_launcher
+      - mkdir -p /app/bin
+      - ln -s /app/ausrine_launcher /app/bin/ausrine_launcher
+    sources:
+      - type: dir
+        path: bundle

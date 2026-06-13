@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ausrine Launcher</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        app: {
+                            background: '#0C0E13',
+                            surface: '#12151C',
+                            surfaceElevated: '#181C26',
+                            primary: '#4A80FF',
+                            primaryHover: '#759FFF',
+                            primaryMuted: 'rgba(74, 128, 255, 0.2)',
+                            textHigh: '#F2F4F8',
+                            textMed: '#ADB5C7',
+                            textLow: '#6B7590',
+                            textDisabled: '#3D4258',
+                            danger: '#FF4F6B',
+                            warn: '#FFBC42',
+                            success: '#4FFFB0',
+                            glass: 'rgba(255, 255, 255, 0.06)',
+                            glassBorder: 'rgba(255, 255, 255, 0.1)',
+                            vanilla: '#4DFFB0',
+                            fabric: '#D4B896',
+                            quilt: '#9B72CF',
+                            forge: '#E88C30',
+                            neoforge: '#FFFF5A36',
+                        }
+                    },
+                    borderRadius: {
+                        'app-md': '10px',
+                        'app-lg': '14px',
+                        'app-xl': '20px',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0C0E13;
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(74, 128, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(74, 128, 255, 0.03) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: #F2F4F8;
+        }
+
+        .interactive-element {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center p-4 sm:p-8 font-sans select-none">
+
+    <!-- Navigation -->
+    <nav
+        class="fixed top-0 left-0 right-0 z-50 bg-app-background/80 backdrop-blur-md border-b border-app-glassBorder px-6 py-4">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 font-bold text-lg text-app-textHigh">
+                <img src="./nobg-icon.svg" alt="Ausrine Icon" class="w-8 h-8 object-contain">
+                Ausrine
+                <span
+                    class="ml-1 px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold bg-app-primary/20 text-app-primary rounded-full border border-app-primary/30">Beta</span>
+            </div>
+            <div class="flex items-center gap-6 text-sm font-medium text-app-textMed hidden sm:flex">
+                <a href="#home" class="hover:text-app-textHigh transition-colors">Home</a>
+                <a href="#details" class="hover:text-app-textHigh transition-colors">Details</a>
+                <a href="#screenshots" class="hover:text-app-textHigh transition-colors">Screenshots</a>
+
+                <div class="w-px h-4 bg-app-glassBorder mx-1"></div>
+
+                <a href="https://github.com/areedelahi/Ausrine-Launcher" target="_blank"
+                    class="hover:text-app-textHigh transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> Source
+                </a>
+                <a href="https://discord.com/invite/HVuWXt7BMJ" target="_blank"
+                    class="hover:text-[#5865F2] transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-discord"></i> Discord
+                </a>
+                <a href="https://patreon.com/AreedElahi" target="_blank"
+                    class="hover:text-[#FF424D] transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-patreon"></i> Patreon
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="home"
+        class="w-full max-w-5xl mx-auto flex flex-col items-center text-center space-y-10 z-10 relative pt-20 mt-8">
+
+        <div class="relative group">
+            <div
+                class="absolute -inset-1 bg-app-primary opacity-20 blur-xl rounded-[22.5%] group-hover:opacity-30 interactive-element">
+            </div>
+
+            <div
+                class="relative w-32 h-32 bg-app-surfaceElevated border border-app-glassBorder rounded-[22.5%] shadow-2xl flex items-center justify-center overflow-hidden interactive-element hover:border-app-primaryMuted">
+
+                <svg class="w-full h-full" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0" stop-color="#0038A8" />
+                            <stop offset="1" stop-color="#00020A" />
+                        </linearGradient>
+
+                        <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+                            <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.35" />
+                        </filter>
+                    </defs>
+
+                    <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+
+                    <g transform="translate(24, -24)">
+                        <rect x="88" y="328" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="136" y="376" width="48" height="48" fill="#003BCC" filter="url(#subtleShadow)" />
+                        <rect x="136" y="280" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="184" y="328" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="184" y="280" width="48" height="48" fill="#001538" filter="url(#subtleShadow)" />
+                        <rect x="184" y="232" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="232" y="280" width="48" height="48" fill="#003BCC" filter="url(#subtleShadow)" />
+                        <rect x="232" y="184" width="48" height="48" fill="#2C9AFF" filter="url(#subtleShadow)" />
+                        <rect x="280" y="232" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="280" y="184" width="48" height="48" fill="#001538" filter="url(#subtleShadow)" />
+                        <rect x="280" y="136" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+                        <rect x="328" y="184" width="48" height="48" fill="#0066FF" filter="url(#subtleShadow)" />
+
+                        <rect x="208" y="256" width="48" height="48" fill="#FFFFFF" filter="url(#subtleShadow)" />
+                    </g>
+                </svg>
+
+            </div>
+        </div>
+
+        <!-- Title & Description -->
+        <div class="space-y-4">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-app-textHigh">
+                Ausrine Launcher
+            </h1>
+            <p class="text-lg md:text-xl text-app-textMed max-w-2xl mx-auto leading-relaxed">
+                A sleek, modern, and <span class="text-app-primary font-semibold">native</span> Minecraft launcher built
+                for performance.
+            </p>
+        </div>
+
+        <!-- Download Section -->
+        <div class="flex flex-col items-center gap-3">
+
+            <div class="flex flex-col sm:flex-row items-stretch justify-center gap-4 w-full">
+
+                <div class="w-full sm:w-[320px] flex-none">
+                    <div class="w-full h-full flex rounded-app-lg shadow-lg border border-transparent hover:border-white/10 overflow-hidden group">
+                        
+                        <a href="#" onclick="showMsixModal(event)"
+                            class="interactive-element flex-1 flex items-center justify-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden min-w-0"
+                            title="Download Windows Installer">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                            <i class="fa-brands fa-microsoft text-2xl shrink-0"></i>
+                            <div class="flex flex-col items-start text-left min-w-0 w-full overflow-hidden">
+                                <span class="font-semibold text-[13px] sm:text-sm leading-tight truncate w-full">Download for Windows</span>
+                                <span class="text-[10px] sm:text-xs text-white/80 font-medium truncate w-full">x64</span>
+                            </div>
+                        </a>
+
+                        <div class="w-[1px] bg-white/20 z-10 relative"></div>
+
+                        <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip"
+                            onclick="showPortableModal()"
+                            class="interactive-element w-[72px] shrink-0 flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden"
+                            title="Download Portable ZIP">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                            <i class="fa-solid fa-file-zipper text-xl mb-1"></i>
+                            <span class="text-[10px] font-medium text-white/90 leading-tight">Portable</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-full sm:w-[320px] flex-none">
+                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg"
+                        onclick="showMacModal()"
+                        class="interactive-element w-full h-full flex items-center justify-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
+                        <i class="fa-brands fa-apple text-3xl shrink-0"></i>
+                        <div class="flex flex-col items-start text-left min-w-0 w-full">
+                            <span class="font-semibold text-sm sm:text-base truncate w-full">Download for macOS</span>
+                            <span class="text-xs text-app-textMed font-medium truncate w-full">Apple Silicon</span>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <p class="text-sm text-app-textLow font-medium flex items-center gap-2 opacity-80">
+                <i class="fa-brands fa-linux"></i> Linux support coming soon
+            </p>
+        </div>
+
+        <!-- Other Projects -->
+        <div class="mt-8 pt-6 flex flex-col items-center space-y-4">
+            <span class="text-sm font-medium text-app-textMed uppercase tracking-wider">Explore my other projects</span>
+            <div
+                class="flex flex-wrap justify-center gap-3 p-2 rounded-app-xl bg-app-glass border border-app-glassBorder backdrop-blur-md">
+
+                <a href="https://github.com/areedelahi" target="_blank"
+                    class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-app-surfaceElevated text-app-textMed hover:text-app-textHigh">
+                    <i class="fa-brands fa-github text-lg"></i>
+                    <span class="text-sm font-medium hidden sm:block">GitHub</span>
+                </a>
+
+                <a href="https://curseforge.com/members/areedelahi" target="_blank"
+                    class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#F16436]/20 text-app-textMed hover:text-[#F16436]">
+                    <i class="fa-solid fa-fire text-lg"></i>
+                    <span class="text-sm font-medium hidden sm:block">CurseForge</span>
+                </a>
+
+                <a href="https://modrinth.com/user/areedelahi" target="_blank"
+                    class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#00AF5C]/20 text-app-textMed hover:text-[#00AF5C]">
+                    <i class="fa-solid fa-leaf text-lg"></i>
+                    <span class="text-sm font-medium hidden sm:block">Modrinth</span>
+                </a>
+
+                <a href="https://mcpedl.com/user/areed-elahi" target="_blank"
+                    class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#158C3D]/20 text-app-textMed hover:text-[#158C3D]">
+                    <i class="fa-solid fa-cubes text-lg"></i>
+                    <span class="text-sm font-medium hidden sm:block">MCPEDL</span>
+                </a>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Features Section -->
+    <section id="details" class="w-full max-w-5xl mx-auto mt-32 pt-8 flex flex-col items-center z-10 relative">
+        <h2 class="text-3xl font-bold text-app-textHigh mb-4">Modern Design, for the set it and forget it users</h2>
+        <p class="text-app-textMed mb-12 text-center max-w-2xl text-lg">Designed from the ground up to be lightweight
+            and completely out of your way. Manage your instances and mods with a beautiful, distraction-free interface.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-primary/10 rounded-app-md flex items-center justify-center text-app-primary mb-4">
+                    <i class="fa-solid fa-gauge-high text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Native Performance</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">No heavy web frameworks here. Compiled natively for
+                    each platform for instant load times, keeping your PC's performance free for the game itself :]</p>
+            </div>
+
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-success/10 rounded-app-md flex items-center justify-center text-app-success mb-4">
+                    <i class="fa-solid fa-boxes-stacked text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Complete Mod Loader Support</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">Full support for the entire modding ecosystem.
+                    Easily install and manage
+                    <span class="text-app-vanilla font-medium">Vanilla</span>,
+                    <span class="text-app-fabric font-medium">Fabric</span>,
+                    <span class="text-app-forge font-medium">Forge</span>,
+                    <span class="text-app-neoforge font-medium">NeoForge</span>, and
+                    <span class="text-app-quilt font-medium">Quilt</span> instances.
+                </p>
+            </div>
+
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-warn/10 rounded-app-md flex items-center justify-center text-app-warn mb-4">
+                    <i class="fa-solid fa-palette text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Sleek Design</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">A dark, modern UI that looks right at home on any
+                    modern operating system. Minimal clutter.</p>
+            </div>
+
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-textLow/10 rounded-app-md flex items-center justify-center text-app-textMed mb-4">
+                    <i class="fa-solid fa-download text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Full Modpacks support</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">One Click Install of any modpack, with in-launcher
+                    Search and install.</p>
+            </div>
+
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-textLow/10 rounded-app-md flex items-center justify-center text-app-textMed mb-4">
+                    <i class="fa-solid fa-magnifying-glass-plus text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Browse and Install Mods with one click</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">Install any mod from Modrinth and Curseforge with
+                    one click, with full version checks.</p>
+            </div>
+
+            <div
+                class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
+                <div
+                    class="w-12 h-12 bg-app-textLow/10 rounded-app-md flex items-center justify-center text-app-textMed mb-4">
+                    <i class="fa-solid fa-sliders text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-app-textHigh mb-2">Full Customizability and Settings</h3>
+                <p class="text-sm text-app-textLow leading-relaxed">Feature Packed from Skin and cape management,
+                    account settings, Java customization, custom paths, RAM management, Updating the instances to new
+                    versions and much more...</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="screenshots" class="w-full max-w-5xl mx-auto mt-32 pt-8 flex flex-col items-center z-10 relative">
+        <h2 class="text-3xl font-bold text-app-textHigh mb-12">See it in action</h2>
+
+        <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 no-scrollbar">
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center first:pl-4 last:pr-4 md:first:pl-0 md:last:pr-0">
+                <img src="./mainscreen.png" alt="Main Dashboard view"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./2.png" alt="Instance Manager view"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./1.png" alt="Settings and Modpack installation view"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./3.png" alt="Launcher screenshot 3"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./4.png" alt="Launcher screenshot 4"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./5.png" alt="Launcher screenshot 5"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./6.png" alt="Launcher screenshot 6"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+
+            <div class="flex-none w-[90%] md:w-[85%] snap-center last:pr-4 md:last:pr-0">
+                <img src="./7.png" alt="Launcher screenshot 7"
+                    class="w-full h-auto object-contain bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl interactive-element hover:border-app-primaryMuted transition-colors" />
+            </div>
+        </div>
+
+        <div class="mt-2 flex gap-2 justify-center items-center text-app-textMed text-sm opacity-70">
+            <i class="fa-solid fa-arrows-left-right"></i>
+            <span>Swipe or scroll to see more</span>
+        </div>
+    </section>
+
+
+    <!-- Footer / Legal -->
+    <footer class="mt-32 mb-8 w-full max-w-4xl mx-auto z-10 relative flex flex-col items-center">
+
+        <div class="mb-10 px-4 w-full max-w-2xl">
+            <div
+                class="bg-app-primary/5 border border-app-primary/20 rounded-app-lg p-5 text-center interactive-element hover:border-app-primary/40 hover:bg-app-primary/10 transition-all">
+                <p class="text-app-textMed text-sm leading-relaxed">
+                    <i class="fa-solid fa-code text-app-primary mr-2"></i>
+                    Want to hire me on commission for Minecraft mods, addons, plugins, or other projects? <br
+                        class="hidden sm:block">
+                    DM me on <a href="https://discord.com/invite/HVuWXt7BMJ" target="_blank"
+                        class="text-[#5865F2] hover:text-[#7289da] font-semibold transition-colors inline-flex items-center gap-1 underline decoration-[#5865F2]/30 decoration-2 underline-offset-2 hover:decoration-[#7289da]"><i
+                            class="fa-brands fa-discord"></i> Discord</a>!
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center space-y-3 px-4">
+            <p class="text-app-textMed text-sm font-medium">
+                Created by Areed Elahi for the Minecraft community :)
+            </p>
+            <p class="text-app-textLow text-xs max-w-2xl mx-auto leading-relaxed">
+                Not approved by or associated with Mojang or Microsoft. "Minecraft" is a trademark of Mojang Studios.
+                Ausrine Launcher is an unofficial project and is not affiliated with the game's creators in any way.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Global Modal Container -->
+    <div id="infoModal"
+        class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+
+        <div class="relative bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300"
+            id="modalPanel">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-app-glassBorder bg-app-surface">
+                <h3 id="modalTitle" class="text-lg font-bold text-app-textHigh">Title</h3>
+                <button onclick="closeModal()" class="text-app-textMed hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div id="modalBody" class="p-6 text-app-textMed text-sm leading-relaxed">
+            </div>
+
+            <div class="px-6 py-4 border-t border-app-glassBorder bg-app-surface flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-4 py-2 bg-app-primary hover:bg-app-primaryHover text-white rounded-app-md font-medium transition-colors text-sm">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('infoModal');
+        const modalPanel = document.getElementById('modalPanel');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function showModal(title, content) {
+            modalTitle.innerText = title;
+            modalBody.innerHTML = content;
+
+            modal.classList.remove('hidden');
+            // Small delay to allow CSS transition to work
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalPanel.classList.remove('scale-95');
+                modalPanel.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalPanel.classList.remove('scale-100');
+            modalPanel.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function showMsixModal(e) {
+            e.preventDefault();
+            showModal(
+                "Microsoft Store Approval Pending",
+                "<p class='mb-3'>The Windows Installer for Ausrine Launcher is currently pending approval on the Microsoft Store.</p><p>In the meantime, please download the <strong>Portable version</strong> (the ZIP button next to it), which requires no installation and is ready to use immediately.</p>"
+            );
+        }
+
+        function showPortableModal() {
+            showModal(
+                "Using the Portable Version",
+                "<p class='mb-3'>Your download is starting! To play:</p><ol class='list-decimal pl-5 space-y-2 text-app-textHigh'><li>Extract the downloaded <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>.zip</code> archive to a folder.</li><li>Open the extracted folder and double-click <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>ausrine_launcher.exe</code>.</li></ol>"
+            );
+        }
+
+        function showMacModal() {
+            showModal(
+                "macOS Installation Guide",
+                "<p class='mb-3'>Your download will start automatically. Follow these steps to install:</p><ol class='list-decimal pl-5 space-y-3 text-app-textHigh'><li><strong>Install:</strong> Open the downloaded <code class='bg-app-background px-1.5 py-0.5 rounded border border-app-glassBorder text-app-primary'>.dmg</code> file and drag \"Ausrine Launcher\" to your Applications folder.</li><li><strong>First Launch:</strong> Double-click the app in your Applications folder. You will see a warning that the app is from an unidentified developer. This is normal for open-source apps not signed with an Apple Developer account (its $99 per year). Click <strong>Done</strong>.</li><li><strong>Allow Execution:</strong> Open System Settings and search for <strong>Privacy & Security</strong>. Scroll down to the bottom.</li><li><strong>Approve:</strong> You will see a message that Ausrine Launcher was blocked. Click <strong>Open Anyway</strong> to launch the app. You only need to do this once!</li></ol>"
+            );
+        }
+    </script>
+</body>
+
+</html>
