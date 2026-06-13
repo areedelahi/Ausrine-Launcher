@@ -125,8 +125,11 @@ pub fn kill_process(pid: u32) {
     unsafe { libc::kill(pid as i32, libc::SIGTERM); }
     #[cfg(windows)]
     {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
         let _ = Command::new("taskkill")
             .args(["/F", "/PID", &pid.to_string()])
+            .creation_flags(CREATE_NO_WINDOW)
             .status();
     }
 }
