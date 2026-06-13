@@ -12,7 +12,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -179,11 +178,11 @@
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
 
-                <!-- Windows Wrapper -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+
                 <div class="w-full max-w-[320px] flex-none">
-                    <!-- Windows Download Split -->
                     <div class="w-full flex rounded-app-lg shadow-lg border border-transparent hover:border-white/10 overflow-hidden group">
-                        <!-- Main MSIX -->
+                        
                         <a href="#" onclick="showMsixModal(event)"
                             class="interactive-element flex-1 flex items-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden min-w-0"
                             title="Download Windows Installer">
@@ -194,10 +193,8 @@
                             </div>
                         </a>
 
-                        <!-- Divider -->
                         <div class="w-[1px] bg-white/20 z-10 relative"></div>
 
-                        <!-- Portable Zip -->
                         <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip"
                             onclick="showPortableModal()"
                             class="interactive-element w-[72px] shrink-0 flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden"
@@ -209,9 +206,7 @@
                     </div>
                 </div>
 
-                <!-- macOS Wrapper -->
                 <div class="w-full max-w-[320px] flex-none">
-                    <!-- macOS Download -->
                     <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg"
                         onclick="showMacModal()"
                         class="interactive-element w-full flex items-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
@@ -236,28 +231,24 @@
             <div
                 class="flex flex-wrap justify-center gap-3 p-2 rounded-app-xl bg-app-glass border border-app-glassBorder backdrop-blur-md">
 
-                <!-- GitHub Profile -->
                 <a href="https://github.com/areedelahi" target="_blank"
                     class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-app-surfaceElevated text-app-textMed hover:text-app-textHigh">
                     <i class="fa-brands fa-github text-lg"></i>
                     <span class="text-sm font-medium hidden sm:block">GitHub</span>
                 </a>
 
-                <!-- CurseForge -->
                 <a href="https://curseforge.com/members/areedelahi" target="_blank"
                     class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#F16436]/20 text-app-textMed hover:text-[#F16436]">
                     <i class="fa-solid fa-fire text-lg"></i>
                     <span class="text-sm font-medium hidden sm:block">CurseForge</span>
                 </a>
 
-                <!-- Modrinth -->
                 <a href="https://modrinth.com/user/areedelahi" target="_blank"
                     class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#00AF5C]/20 text-app-textMed hover:text-[#00AF5C]">
                     <i class="fa-solid fa-leaf text-lg"></i>
                     <span class="text-sm font-medium hidden sm:block">Modrinth</span>
                 </a>
 
-                <!-- MCPEDL -->
                 <a href="https://mcpedl.com/user/areed-elahi" target="_blank"
                     class="interactive-element flex items-center gap-2 px-4 py-2 rounded-app-md hover:bg-[#158C3D]/20 text-app-textMed hover:text-[#158C3D]">
                     <i class="fa-solid fa-cubes text-lg"></i>
@@ -269,7 +260,7 @@
 
     </main>
 
-    <!-- Deatures Section -->
+    <!-- Features Section -->
     <section id="details" class="w-full max-w-5xl mx-auto mt-32 pt-8 flex flex-col items-center z-10 relative">
         <h2 class="text-3xl font-bold text-app-textHigh mb-4">Modern Design, for the set it and forget it users</h2>
         <p class="text-app-textMed mb-12 text-center max-w-2xl text-lg">Designed from the ground up to be lightweight
@@ -277,7 +268,6 @@
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
-            <!-- Feature 1 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -289,7 +279,6 @@
                     each platform for instant load times, keeping your PC's performance free for the game itself :]</p>
             </div>
 
-            <!-- Feature 2 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -307,7 +296,6 @@
                 </p>
             </div>
 
-            <!-- Feature 3 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -319,7 +307,6 @@
                     modern operating system. Minimal clutter.</p>
             </div>
 
-            <!-- Feature 4 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -331,7 +318,6 @@
                     Search and install.</p>
             </div>
 
-            <!-- Feature 5 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -343,7 +329,6 @@
                     one click, with full version checks.</p>
             </div>
 
-            <!-- Feature 6 -->
             <div
                 class="bg-app-surface border border-app-glassBorder rounded-app-lg p-6 hover:border-app-primaryMuted interactive-element">
                 <div
@@ -362,7 +347,6 @@
     <section id="screenshots" class="w-full max-w-5xl mx-auto mt-32 pt-8 flex flex-col items-center z-10 relative">
         <h2 class="text-3xl font-bold text-app-textHigh mb-12">See it in action</h2>
 
-        <!-- Carousel Container -->
         <div class="w-full flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 no-scrollbar">
 
             <div class="flex-none w-[90%] md:w-[85%] snap-center first:pl-4 last:pr-4 md:first:pl-0 md:last:pr-0">
@@ -416,7 +400,6 @@
     <!-- Footer / Legal -->
     <footer class="mt-32 mb-8 w-full max-w-4xl mx-auto z-10 relative flex flex-col items-center">
 
-        <!-- Commission Callout -->
         <div class="mb-10 px-4 w-full max-w-2xl">
             <div
                 class="bg-app-primary/5 border border-app-primary/20 rounded-app-lg p-5 text-center interactive-element hover:border-app-primary/40 hover:bg-app-primary/10 transition-all">
@@ -431,7 +414,6 @@
             </div>
         </div>
 
-        <!-- Credits and Disclaimer -->
         <div class="text-center space-y-3 px-4">
             <p class="text-app-textMed text-sm font-medium">
                 Created by Areed Elahi for the Minecraft community :)
@@ -446,13 +428,10 @@
     <!-- Global Modal Container -->
     <div id="infoModal"
         class="fixed inset-0 z-[100] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
 
-        <!-- Modal Content -->
         <div class="relative bg-app-surfaceElevated border border-app-glassBorder rounded-app-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300"
             id="modalPanel">
-            <!-- Header -->
             <div class="flex justify-between items-center px-6 py-4 border-b border-app-glassBorder bg-app-surface">
                 <h3 id="modalTitle" class="text-lg font-bold text-app-textHigh">Title</h3>
                 <button onclick="closeModal()" class="text-app-textMed hover:text-white transition-colors">
@@ -460,12 +439,9 @@
                 </button>
             </div>
 
-            <!-- Body -->
             <div id="modalBody" class="p-6 text-app-textMed text-sm leading-relaxed">
-                <!-- Content injected via JS -->
             </div>
 
-            <!-- Footer -->
             <div class="px-6 py-4 border-t border-app-glassBorder bg-app-surface flex justify-end">
                 <button onclick="closeModal()"
                     class="px-4 py-2 bg-app-primary hover:bg-app-primaryHover text-white rounded-app-md font-medium transition-colors text-sm">
