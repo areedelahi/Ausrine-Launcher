@@ -15,7 +15,7 @@ modules:
   - name: ausrine-launcher
     buildsystem: simple
     build-commands:
-      - cp -r bundle/* /app/
+      - cp -a * /app/
       - chmod +x /app/ausrine_launcher
       - mkdir -p /app/bin
       - ln -s /app/ausrine_launcher /app/bin/ausrine_launcher
