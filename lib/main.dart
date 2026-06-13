@@ -123,7 +123,7 @@ Future<void> main(List<String> args) async {
       if (isMaximized) {
         if (Platform.isWindows) {
           // Delay to ensure the window is fully mapped before maximizing
-          await Future.delayed(const Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 250));
         }
         await windowManager.maximize();
       }
@@ -147,6 +147,7 @@ class AusrineLauncherApp extends StatefulWidget {
 
 class _AusrineLauncherAppState extends State<AusrineLauncherApp> with WindowListener {
   Timer? _saveTimer;
+  bool _isClosing = false;
 
   @override
   void initState() {
@@ -162,6 +163,7 @@ class _AusrineLauncherAppState extends State<AusrineLauncherApp> with WindowList
   }
 
   void _scheduleSave() {
+    if (_isClosing) return;
     _saveTimer?.cancel();
     _saveTimer = Timer(const Duration(milliseconds: 500), _saveWindowBounds);
   }
@@ -187,6 +189,13 @@ class _AusrineLauncherAppState extends State<AusrineLauncherApp> with WindowList
     } catch (_) {
       // Ignore errors if window is closing
     }
+  }
+
+  @override
+  void onWindowClose() {
+    _isClosing = true;
+    _saveTimer?.cancel();
+    super.onWindowClose();
   }
 
   @override
