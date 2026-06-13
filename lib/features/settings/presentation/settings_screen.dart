@@ -271,9 +271,16 @@ class _GeneralSettings extends StatelessWidget {
                   AppButton(
                       label: 'Browse',
                       onPressed: () async {
+                        final initialCwd = Directory.current;
                         final result = await FilePicker.platform.getDirectoryPath(
                           dialogTitle: 'Select Custom Data Directory',
                         );
+                        
+                        try {
+                          // Windows FilePicker dialogs can change the CWD, causing native crashes or DLL hijacking
+                          Directory.current = initialCwd;
+                        } catch (_) {}
+                        
                         if (result != null) {
                           onCustomDirChanged(result);
                         }
