@@ -111,6 +111,10 @@ Future<void> main(List<String> args) async {
       );
     }
 
+    // ProviderScope enables Riverpod state management throughout app
+    _logInfo('Running Flutter app');
+    runApp(const ProviderScope(child: AusrineLauncherApp()));
+
     _logInfo('Waiting until window is ready to show');
     await windowManager.waitUntilReadyToShow(options, () async {
       _logInfo('Showing main window');
@@ -129,10 +133,6 @@ Future<void> main(List<String> args) async {
       }
       _logInfo('Main window shown');
     });
-
-    // ProviderScope enables Riverpod state management throughout app
-    _logInfo('Running Flutter app');
-    runApp(const ProviderScope(child: AusrineLauncherApp()));
   }, (error, stack) {
     _logError('Uncaught asynchronous error', error, stack);
   });

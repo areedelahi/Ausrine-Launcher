@@ -5,7 +5,8 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_card.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
+import 'package:path/path.dart' as p;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/providers/settings_provider.dart';
@@ -271,16 +272,9 @@ class _GeneralSettings extends StatelessWidget {
                   AppButton(
                       label: 'Browse',
                       onPressed: () async {
-                        final initialCwd = Directory.current;
-                        final result = await FilePicker.platform.getDirectoryPath(
-                          dialogTitle: 'Select Custom Data Directory',
+                        final result = await getDirectoryPath(
+                          confirmButtonText: 'Select',
                         );
-                        
-                        try {
-                          // Windows FilePicker dialogs can change the CWD, causing native crashes or DLL hijacking
-                          Directory.current = initialCwd;
-                        } catch (_) {}
-                        
                         if (result != null) {
                           onCustomDirChanged(result);
                         }
@@ -526,12 +520,14 @@ class _JavaSettingsState extends State<_JavaSettings> {
                   AppButton(
                       label: 'Browse',
                       onPressed: () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          dialogTitle: 'Select Java Executable',
-                          type: FileType.any,
+                        final typeGroup = const XTypeGroup(
+                          label: 'executables',
                         );
-                        if (result != null && result.files.single.path != null) {
-                          widget.onJavaExecutableChanged(result.files.single.path!);
+                        final result = await openFile(
+                          acceptedTypeGroups: [typeGroup],
+                        );
+                        if (result != null) {
+                          widget.onJavaExecutableChanged(result.path);
                         }
                       },
                       variant: AppButtonVariant.outline),
