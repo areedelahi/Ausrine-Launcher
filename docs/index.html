@@ -177,50 +177,51 @@
         <!-- Download Section -->
         <div class="flex flex-col items-center gap-3">
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
 
-                <!-- Windows Download Split -->
-                <div
-                    class="w-full sm:w-80 shrink-0 flex rounded-app-lg shadow-lg border border-transparent hover:border-white/10 overflow-hidden group">
-                    <!-- Main MSIX (75%) -->
-                    <a href="#" onclick="showMsixModal(event)"
-                        class="interactive-element w-[75%] flex items-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden"
-                        title="Download Windows Installer">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]">
-                        </div>
-                        <i class="fa-brands fa-microsoft text-2xl shrink-0"></i>
-                        <div class="flex flex-col items-start text-left">
-                            <span class="font-semibold text-sm leading-tight">Download for Windows</span>
-                        </div>
-                    </a>
+                <!-- Windows Wrapper -->
+                <div class="w-full max-w-[320px] flex-none">
+                    <!-- Windows Download Split -->
+                    <div class="w-full flex rounded-app-lg shadow-lg border border-transparent hover:border-white/10 overflow-hidden group">
+                        <!-- Main MSIX -->
+                        <a href="#" onclick="showMsixModal(event)"
+                            class="interactive-element flex-1 flex items-center gap-3 bg-app-primary hover:bg-app-primaryHover text-white px-4 py-4 relative overflow-hidden min-w-0"
+                            title="Download Windows Installer">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                            <i class="fa-brands fa-microsoft text-2xl shrink-0"></i>
+                            <div class="flex flex-col items-start text-left min-w-0 w-full overflow-hidden">
+                                <span class="font-semibold text-[13px] sm:text-sm leading-tight truncate w-full">Download for Windows</span>
+                            </div>
+                        </a>
 
-                    <!-- Divider -->
-                    <div class="w-[1px] bg-white/20 z-10 relative"></div>
+                        <!-- Divider -->
+                        <div class="w-[1px] bg-white/20 z-10 relative"></div>
 
-                    <!-- Portable Zip (25%) -->
-                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip"
-                        onclick="showPortableModal()"
-                        class="interactive-element w-[25%] flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden"
-                        title="Download Portable ZIP">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]">
-                        </div>
-                        <i class="fa-solid fa-file-zipper text-xl mb-1"></i>
-                        <span class="text-[10px] font-medium text-white/90 leading-tight">Portable</span>
-                    </a>
+                        <!-- Portable Zip -->
+                        <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/ausrine-launcher-windows-portable.zip"
+                            onclick="showPortableModal()"
+                            class="interactive-element w-[72px] shrink-0 flex flex-col items-center justify-center bg-app-primary hover:bg-app-primaryHover text-white px-2 py-4 relative overflow-hidden"
+                            title="Download Portable ZIP">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                            <i class="fa-solid fa-file-zipper text-xl mb-1"></i>
+                            <span class="text-[10px] font-medium text-white/90 leading-tight">Portable</span>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- macOS Download -->
-                <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg"
-                    onclick="showMacModal()"
-                    class="interactive-element w-full sm:w-80 shrink-0 flex items-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
-                    <i class="fa-brands fa-apple text-3xl"></i>
-                    <div class="flex flex-col items-start text-left">
-                        <span class="font-semibold text-base">Download for macOS</span>
-                        <span class="text-xs text-app-textMed font-medium">Apple Silicon</span>
-                    </div>
-                </a>
+                <!-- macOS Wrapper -->
+                <div class="w-full max-w-[320px] flex-none">
+                    <!-- macOS Download -->
+                    <a href="https://github.com/areedelahi/Ausrine-Launcher/releases/latest/download/Ausrine-Launcher.dmg"
+                        onclick="showMacModal()"
+                        class="interactive-element w-full flex items-center gap-4 bg-app-surface hover:bg-app-surfaceElevated text-app-textHigh px-6 py-4 rounded-app-lg shadow-lg border border-app-glassBorder hover:border-app-textMed">
+                        <i class="fa-brands fa-apple text-3xl shrink-0"></i>
+                        <div class="flex flex-col items-start text-left min-w-0 w-full">
+                            <span class="font-semibold text-sm sm:text-base truncate w-full">Download for macOS</span>
+                            <span class="text-xs text-app-textMed font-medium truncate w-full">Apple Silicon</span>
+                        </div>
+                    </a>
+                </div>
 
             </div>
 
