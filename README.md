@@ -2,6 +2,21 @@
 
 A fast, clean Minecraft launcher for Mac, Windows, and Linux.
 
+## Features
+
+- Sign in with your Microsoft/Xbox account
+- Create instances for different Minecraft versions
+- Install modloaders: Fabric, Forge, Quilt, NeoForge
+- Download modpacks directly from Modrinth
+- Search and install mods
+- Per-instance settings: Java version, RAM allocation, JVM args
+- Multi-account support
+- Offline Mode
+- View debug logs and game output
+- Concurrent Downloads Support (Means very fast downloading)
+- Full Support for old versions and running them natively on MacOS
+- And the best part? Its native, instant starting and high performance Launcher with a really really pretty UI.
+
 ## Download and Install
 
 ### macOS
@@ -96,7 +111,7 @@ When you first launch the app:
 - You can change this in Settings under "Custom Data Folder"
 
 ## Technical Details
-Majority of the code is Dart/Flutter Based, along with a quite modified rust mc-launcher-core.
+60% of the code is Dart/Flutter Based, along with a quite modified rust mc-launcher-core.
 
 <div>&nbsp;<hr></div>
 
