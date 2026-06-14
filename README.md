@@ -3,7 +3,7 @@
 A fast, clean Minecraft launcher for Mac, Windows, and Linux.
 For better details as Players, Please Go to the website: https://areedelahi.github.io/Ausrine-Launcher
 
-Due to my studies and university, im not going to maintain it for now, This is my passion project (and long story short, some people killed my passion), if you are a user, try it out once, it will work fine for a long time, and if you are a developer, PLEASE consider taking up lead dev role. thank you
+Due to my studies and university, im not going to maintain it for now, This is my passion project (and long story short, some people killed my passion), if you are a user, try it out once, it will work fine for a long time, and if you are a developer, PLEASE consider taking up lead dev role. thank you.
 
 ## Features
 
