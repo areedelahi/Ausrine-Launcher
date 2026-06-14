@@ -104,9 +104,6 @@ When you first launch the app:
 - Linux (Ubuntu 20.04+, Fedora 32+, etc.) (not released or tested)
 - Java (auto-detected and setup)
 
-Note: Ai is used in some parts of code, especially in website, commits will be labeled as Ai-made or Developer-made, for proper transparency.
-and I'm also looking for someone willing to contribute for the linux version.
-
 ## Data:
 - Data is stored in a hidden folder:
   - macOS: `~/Library/Application Support/Ausrine Launcher`
@@ -116,6 +113,8 @@ and I'm also looking for someone willing to contribute for the linux version.
 
 ## Technical Details
 60% of the code is Dart/Flutter Based, along with a quite modified rust mc-launcher-core.
+Note: Ai tools like the Comments Generator Extension etc are used in some parts of code, especially in website, commits will be labeled as Ai-made or Developer-made, for proper transparency. But don't worry, not a single commit is done unless the code is verified by the dev.
+And I'm also looking for someone willing to contribute for the linux version.
 
 <div>&nbsp;<hr></div>
 
