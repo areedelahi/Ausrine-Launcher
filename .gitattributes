@@ -1,0 +1,14 @@
+# Ignore auto-generated and build directories from GitHub language statistics
+macos/* linguist-vendored
+linux/* linguist-vendored
+windows/* linguist-vendored
+rust_builder/* linguist-vendored
+build/* linguist-vendored
+docs/* linguist-vendored
+
+# Ignore specific helper scripts
+*.sh linguist-vendored
+*.py linguist-vendored
+*.js linguist-vendored
+*.html linguist-vendored
+*.css linguist-vendored
